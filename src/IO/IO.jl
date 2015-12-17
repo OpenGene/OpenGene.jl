@@ -2,8 +2,8 @@
 # IO functions are provided as core featuers of OpenGene, so it is not inside a sub-module
 # ===========
 
-export Fastq,
-	open_fastq,
+export fastq_open,
+	fastq_read,
 	get_format,
 	is_zipped
 
