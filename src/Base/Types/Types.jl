@@ -2,7 +2,14 @@ export Sequence,
 	Quality,
 	SeqRead,
 	FastaRead,
-	FastqRead
+	FastqRead,
+	reverse,
+	==,
+	-
+
+import Base: convert,
+	==,
+	-
 
 export DNA_SEQ,
 	RNA_SEQ,
