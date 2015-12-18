@@ -9,7 +9,13 @@ function fastq_open(filename::AbstractString, mode::AbstractString="r")
 	if !verify_openmode(mode)
 		return false
 	end
-	return open(filename, mode) |> streamtype(filename, mode)
+	# WAR to fix gz file reading issue of Libz
+	# https://github.com/BioJulia/Libz.jl/issues/9
+	if ZlibInflateInputStream == streamtype(filename, mode)
+		return ZlibInflateInputStream(open(filename, mode), reset_on_end=true)
+	else
+		return open(filename, mode) |> streamtype(filename, mode)
+	end
 end
 
 # read the stream and return a fastq record
