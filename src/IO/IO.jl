@@ -4,8 +4,7 @@
 
 export fastq_open,
 	fastq_read,
-	get_format,
-	is_zipped
+	fastq_write
 
 include("common.jl")
 
