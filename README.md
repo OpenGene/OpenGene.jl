@@ -10,6 +10,7 @@ This project is just started and it need more bioinformaticians to contribute. I
 This project hasn't been registered in Julia METADATA.jl, so if you want to use it, do:
 ```julia
 Pkg.clone("git://github.com/OpenGene/OpenGene.jl.git")
+Pkg.build("OpenGene")
 ```
 
 ## Example
