@@ -9,7 +9,7 @@ This project is just started and it need more bioinformaticians to contribute. I
 ## Add OpenGene
 This project hasn't been registered in Julia METADATA.jl, so if you want to use it, do:
 ```julia
-Pkg.add("git://github.com/OpenGene/OpenGene.jl.git")
+Pkg.clone("git://github.com/OpenGene/OpenGene.jl.git")
 ```
 
 ## Example
