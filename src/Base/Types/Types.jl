@@ -5,14 +5,17 @@ export Sequence,
 	FastqRead,
 	FastqPair,
 	reverse,
+	complement,
 	reverse_complement,
 	==,
 	-,
+	!,
 	~
 
 import Base: convert,
 	==,
 	-,
+	!,
 	~
 
 export DNA_SEQ,
