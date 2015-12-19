@@ -4,10 +4,14 @@
 
 export fastq_open,
 	fastq_read,
-	fastq_write
+	fastq_write,
+	fasta_open,
+	fasta_read,
+	fasta_write
 
 include("common.jl")
 
 # for every file format, we create a folder
 include("fastq/fastq.jl")
+include("fasta/fasta.jl")
 

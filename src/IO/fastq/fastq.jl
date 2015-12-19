@@ -1,6 +1,4 @@
 
-using Libz
-
 # open a fastq stream, mode should be either r or w
 function fastq_open(filename::AbstractString, mode::AbstractString="r")
 	if !verify_openmode(mode)

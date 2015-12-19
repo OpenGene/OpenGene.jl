@@ -1,3 +1,5 @@
+
+using Libz
 import BufferedStreams:
 	BufferedInputStream,
 	BufferedOutputStream
