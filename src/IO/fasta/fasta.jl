@@ -44,7 +44,7 @@ function fasta_write(stream::BufferedOutputStream, fa::FastaRead, linesize = 50)
 		write(stream, ">", fa.name, "\n")
 		len = length(fa.sequence)
 		for i in 1:linesize:len
-			write(stream, fa.sequence.seq[i:min(i+linesize, len)], "\n")
+			write(stream, fa.sequence.seq[i:min(i+linesize-1, len)], "\n")
 		end
 	catch e
 		println(e)
