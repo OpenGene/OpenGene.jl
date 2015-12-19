@@ -7,7 +7,13 @@ export fastq_open,
 	fastq_write,
 	fasta_open,
 	fasta_read,
-	fasta_write
+	fasta_write,
+	FastqPairStream,
+	fastq_open_pair,
+	fastq_flush_pair,
+	fastq_close_pair,
+	fastq_read_pair,
+	fastq_write_pair
 
 include("common.jl")
 

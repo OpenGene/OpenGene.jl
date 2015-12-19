@@ -42,3 +42,45 @@ function fastq_write(stream::BufferedOutputStream, fq::FastqRead)
 	end
 end
 
+# handle reading and writing for a pair<read1 + read2> of fastq files
+type FastqPairStream
+	read1stream
+	read2stream
+	iswrite::Bool
+end
+
+function fastq_flush_pair(s::FastqPairStream)
+	if s.iswrite
+		flush(s.read1stream)
+		flush(s.read2stream)
+	end
+end
+
+function fastq_close_pair(s::FastqPairStream)
+	if s.iswrite
+		close(s.read1stream)
+		close(s.read2stream)
+	end
+end
+
+function fastq_open_pair(filename1::AbstractString, filename2::AbstractString, mode::AbstractString="r")
+	return FastqPairStream(fastq_open(filename1, mode), fastq_open(filename2, mode), contains(mode, "w"))
+end
+
+function fastq_read_pair(s::FastqPairStream)
+	read1 = fastq_read(s.read1stream)
+	read2 = fastq_read(s.read2stream)
+	if read1 == false || read2 == false
+		return false
+	end
+	return FastqPair(read1, read2)
+end
+
+function fastq_write_pair(s::FastqPairStream, pair::FastqPair)
+	fastq_write(s.read1stream, pair.read1)
+	fastq_write(s.read2stream, pair.read2)
+end
+
+Base.eof(stream::FastqPairStream) =  eof(stream.read1stream) || eof(stream.read2stream)
+Base.flush(stream::FastqPairStream) = fastq_flush_pair(stream)
+Base.close(stream::FastqPairStream) = fastq_close_pair(stream)
