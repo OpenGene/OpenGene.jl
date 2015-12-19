@@ -4,12 +4,15 @@ export Sequence,
 	FastaRead,
 	FastqRead,
 	reverse,
+	reverse_complement,
 	==,
-	-
+	-,
+	~
 
 import Base: convert,
 	==,
-	-
+	-,
+	~
 
 export DNA_SEQ,
 	RNA_SEQ,
