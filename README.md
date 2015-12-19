@@ -10,10 +10,17 @@ This project is just started and it need more bioinformaticians to contribute. I
 This project hasn't been registered in Julia METADATA.jl, so if you want to use it, do:
 ```julia
 Pkg.clone("git://github.com/OpenGene/OpenGene.jl.git")
+
+# you can build it to accelerate the loading (optional)
 Pkg.build("OpenGene")
 ```
 
-## Example
+This project is under active developing, remember to update it to get newest features:
+```julia
+Pkg.update()
+```
+## Examples
+***read/write a single fastq file***
 ```julia
 using OpenGene
 
@@ -24,6 +31,23 @@ ostream = fastq_open("output.fastq.gz","w")
 # fastq_write can write a FastqRead into a ouput stream
 while (fq = fastq_read(istream))!=false
     fastq_write(ostream, fq)
+end
+
+close(ostream)
+
+```
+
+***read/write a pair of fastq files***
+```julia
+using OpenGene
+
+istream = fastq_open_pair("R1.fastq.gz", "R2.fastq.gz")
+ostream = fastq_open_pair("Out.R1.fastq.gz","Out.R2.fastq.gz","w")
+
+# fastq_read_pair will return a pair of FastqRead {read1, read2}
+# fastq_write_pair can write this pair to two files
+while (pair = fastq_read_pair(istream))!=false
+    fastq_write_pair(ostream, pair)
 end
 
 close(ostream)
