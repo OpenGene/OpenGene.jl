@@ -12,7 +12,7 @@ reverse_compelment_fq = FastqRead(seq_name, reverse_compelment_seq, "+", reverse
 fa = FastaRead(seq_name, seq)
 reverse_compelment_fa = FastaRead(seq_name, reverse_compelment_seq)
 
-@test  seq == same_seq
+@test seq == same_seq
 @test seq == -reverse_seq
 @test seq == !compelment_seq
 @test seq == ~reverse_compelment_seq
