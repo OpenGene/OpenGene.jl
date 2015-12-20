@@ -15,7 +15,8 @@ export opengene_open,
 	fastq_close_pair,
 	fastq_read_pair,
 	fastq_write_pair,
-	bed_read_intervals
+	bed_read_intervals,
+	bed_write_intervals
 
 include("common.jl")
 
