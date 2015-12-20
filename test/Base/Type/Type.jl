@@ -24,3 +24,6 @@ reverse_compelment_fa = FastaRead(seq_name, reverse_compelment_seq)
 @test reverse_compelment_fq.sequence == (~fq).sequence
 @test reverse_compelment_fq.quality == (~fq).quality
 @test reverse_compelment_fa.sequence == (~fa).sequence
+@test dna("AAAATTTTCCCCGGGGAAAATTTTCCCCGGGG") == Sequence("AAAATTTTCCCCGGGGAAAATTTTCCCCGGGG", DNA_SEQ)
+@test rna("AAAATTTTCCCCGGGGAAAATTTTCCCCGGGG") == Sequence("AAAATTTTCCCCGGGGAAAATTTTCCCCGGGG", RNA_SEQ)
+@test aa("AAAATTTTCCCCGGGGAAAATTTTCCCCGGGG") == Sequence("AAAATTTTCCCCGGGGAAAATTTTCCCCGGGG", AA_SEQ)
