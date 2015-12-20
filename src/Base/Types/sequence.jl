@@ -14,6 +14,19 @@ Base.getindex(s::Sequence, i::Int64) = getindex(s.seq, i)
 Base.getindex(s::Sequence, r::UnitRange{Int64}) = Sequence(getindex(s.seq, r), s.seqtype)
 Base.getindex(s::Sequence, indx::AbstractArray{Int64,1}) = Sequence(getindex(s.seq, indx), s.seqtype)
 Base.reverse(s::Sequence) = Sequence(reverse(s.seq), s.seqtype)
+Base.display(s::Sequence) = display_sequence(s)
+
+function dna(str::ASCIIString)
+	return Sequence(str, DNA_SEQ)
+end
+
+function rna(str::ASCIIString)
+	return Sequence(str, RNA_SEQ)
+end
+
+function aa(str::ASCIIString)
+	return Sequence(str, AA_SEQ)
+end
 
 const DNA_COMPLEMENT = Dict('A'=>'T', 'T'=>'A', 'C'=>'G', 'G'=>'C')
 
@@ -39,3 +52,20 @@ end
 -(s1::Sequence) = reverse(s1)
 !(s1::Sequence) = complement(s1)
 ~(s1::Sequence) = reverse_complement(s1)
+
+# because we may meet very long sequence
+# it's better to display only the head and tail of sequence if it's very long
+# if limit is set 0, then no limit is made, the whole sequence will be displayed
+function display_sequence(s::Sequence, limit::Int64 = 100)
+	const prefix = Dict(DNA_SEQ=>"dna", RNA_SEQ=>"rna", AA_SEQ=>"aa")
+	str = prefix[s.seqtype] * "(\""
+	len = length(s)
+	if len <= limit || limit <= 0
+		str = str * s.seq * "\")"
+	else
+		half = limit/2
+		str = str * s.seq[1:half] * "......"
+		str = str * s.seq[len-half:len] * "\")"
+	end
+	println(str)
+end
