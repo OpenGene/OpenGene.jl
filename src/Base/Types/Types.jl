@@ -11,6 +11,8 @@ export Sequence,
 	complement,
 	reverse_complement,
 	display_sequence,
+	Interval,
+	BED,
 	==,
 	-,
 	!,
@@ -29,3 +31,4 @@ export DNA_SEQ,
 include("sequence.jl")
 include("quality.jl")
 include("read.jl")
+include("interval.jl")

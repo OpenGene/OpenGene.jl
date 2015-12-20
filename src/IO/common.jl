@@ -49,3 +49,17 @@ function verify_openmode(mode::AbstractString)
 		return true
 	end
 end
+
+"the common open function to be used by other open files like fastq_open, bed_open"
+function opengene_open(filename::AbstractString, mode::AbstractString="r")
+	if !verify_openmode(mode)
+		return false
+	end
+	# WAR to fix gz file reading issue of Libz
+	# https://github.com/BioJulia/Libz.jl/issues/9
+	if ZlibInflateInputStream == streamtype(filename, mode)
+		return ZlibInflateInputStream(open(filename, mode), reset_on_end=true)
+	else
+		return open(filename, mode) |> streamtype(filename, mode)
+	end
+end

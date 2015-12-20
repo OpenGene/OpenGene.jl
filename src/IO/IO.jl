@@ -2,7 +2,8 @@
 # IO functions are provided as core featuers of OpenGene, so it is not inside a sub-module
 # ===========
 
-export fastq_open,
+export opengene_open,
+	fastq_open,
 	fastq_read,
 	fastq_write,
 	fasta_open,
@@ -13,11 +14,13 @@ export fastq_open,
 	fastq_flush_pair,
 	fastq_close_pair,
 	fastq_read_pair,
-	fastq_write_pair
+	fastq_write_pair,
+	bed_read_intervals
 
 include("common.jl")
 
 # for every file format, we create a folder
 include("fastq/fastq.jl")
 include("fasta/fasta.jl")
+include("beds/bed.jl")
 

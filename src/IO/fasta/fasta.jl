@@ -1,16 +1,7 @@
 
 # open a fasta stream, mode should be either r or w
 function fasta_open(filename::AbstractString, mode::AbstractString="r")
-	if !verify_openmode(mode)
-		return false
-	end
-	# WAR to fix gz file reading issue of Libz
-	# https://github.com/BioJulia/Libz.jl/issues/9
-	if ZlibInflateInputStream == streamtype(filename, mode)
-		return ZlibInflateInputStream(open(filename, mode), reset_on_end=true)
-	else
-		return open(filename, mode) |> streamtype(filename, mode)
-	end
+	return opengene_open(filename, mode)
 end
 
 # read the stream and return a fasta record
