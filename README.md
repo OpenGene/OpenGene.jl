@@ -20,7 +20,7 @@ This project is under active developing, remember to update it to get newest fea
 Pkg.update()
 ```
 ## Examples
-***read/write a single fastq file***
+***read/write a single fastq/fasta file***
 ```julia
 using OpenGene
 
@@ -36,6 +36,7 @@ end
 close(ostream)
 
 ```
+fasta is supported similarly with `fasta_open`, `fasta_read` and `fasta_write`   
 
 ***read/write a pair of fastq files***
 ```julia
