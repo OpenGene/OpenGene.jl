@@ -34,7 +34,6 @@ while (fq = fastq_read(istream))!=false
 end
 
 close(ostream)
-
 ```
 fasta is supported similarly with `fasta_open`, `fasta_read` and `fasta_write`   
 
@@ -52,5 +51,14 @@ while (pair = fastq_read_pair(istream))!=false
 end
 
 close(ostream)
+```
 
+***read/write a bed file***
+```julia
+using OpenGene
+
+# read all records, return an array of Intervals(chrom, chromstart, chromend)
+intervals = bed_read_intervals("in.bed")
+# write all records
+bed_write_intervals("out.bed",intervals)
 ```
