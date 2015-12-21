@@ -58,14 +58,14 @@ end
 # if limit is set 0, then no limit is made, the whole sequence will be displayed
 function display_sequence(s::Sequence, limit::Int64 = 1000)
 	const prefix = Dict(DNA_SEQ=>"dna", RNA_SEQ=>"rna", AA_SEQ=>"aa")
-	str = prefix[s.seqtype] * "(\""
 	len = length(s)
+	str = ""
 	if len <= limit || limit <= 0
-		str = str * s.seq * "\")"
+		str = str * s.seq
 	else
 		show = min(500, round(Int, limit/2))
 		str = str * s.seq[1:show] * "......"
-		str = str * s.seq[len-show:len] * "\")"
+		str = str * s.seq[len-show:len]
 	end
 	println(str)
 end
