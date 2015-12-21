@@ -63,7 +63,7 @@ function display_sequence(s::Sequence, limit::Int64 = 100)
 	if len <= limit || limit <= 0
 		str = str * s.seq * "\")"
 	else
-		half = limit/2
+		half = round(Int, limit/2)
 		str = str * s.seq[1:half] * "......"
 		str = str * s.seq[len-half:len] * "\")"
 	end
