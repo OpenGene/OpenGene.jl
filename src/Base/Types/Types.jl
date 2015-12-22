@@ -16,6 +16,7 @@ export Sequence,
 	display_fastq_pair,
 	Interval,
 	BED,
+	Variant,
 	==,
 	-,
 	!,
@@ -36,3 +37,4 @@ include("sequence.jl")
 include("quality.jl")
 include("read.jl")
 include("interval.jl")
+include("variant.jl")
