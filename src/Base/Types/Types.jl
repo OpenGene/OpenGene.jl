@@ -22,6 +22,7 @@ export Sequence,
 	~
 
 import Base: convert,
+        complement,
 	==,
 	-,
 	!,

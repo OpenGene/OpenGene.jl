@@ -19,6 +19,7 @@ reverse_compelment_fa = FastaRead(seq_name, reverse_compelment_seq)
 @test seq == -(-seq)
 @test seq == !(!seq)
 @test seq == ~(~seq)
+@test complement(dna("ATCG"))== dna("TAGC")
 @test reverse_compelment_seq == !(-seq)
 @test reverse_compelment_seq == -(!seq)
 @test reverse_compelment_fq.sequence == (~fq).sequence
