@@ -22,6 +22,12 @@ export Sequence,
 	!,
 	~
 
+export VcfHeader,
+	vcf_add_meta_line,
+	vcf_add_meta,
+	vcf_parse_meta,
+	vcf_parse_prop
+
 import Base: convert,
         complement,
 	==,
