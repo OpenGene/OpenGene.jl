@@ -19,14 +19,11 @@ export opengene_open,
 	bed_write_intervals
 
 export vcf_open,
-	vcf_read_line,
-	vcf_read_all,
-	vcf_write_line,
-	vcf_write_all,
-	vcf_add_column,
-	vcf_add_column_line,
-	vcf_add_meta_line,
-	vcf_add_meta
+	vcf_read_header,
+	vcf_read_data_line,
+	vcf_read_data_all,
+	vcf_write_data_line,
+	vcf_write_data_all
 
 include("common.jl")
 
