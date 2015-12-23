@@ -16,6 +16,10 @@ end
 
 vcf_add_column(header::VcfHeader, column::ASCIIString) = push!(header.columns, column)
 
+function vcf_write_columns(stream::BufferedOutputStream, header::VcfHeader)
+    write(stream, join(header.columns, "\t"), "\n")
+end
+
 """
 A meta information line of a VCF file is started with ##
 ##reference=file:///seq/references/1000GenomesPilot-NCBI36.fasta
@@ -72,4 +76,30 @@ function vcf_parse_prop(prop::ASCIIString)
     end
     key, value = split(prop, "=")
     return (ASCIIString(key), ASCIIString(value))
+end
+
+function vcf_write_metas(stream::BufferedOutputStream, header::VcfHeader)
+    for (key, meta) in header.metas
+        println(key)
+        println(meta)
+        for meta_props in meta
+            line = vcf_make_line(key, meta_props)
+            write(stream, line)
+        end
+    end
+end
+
+function vcf_make_line(key::ASCIIString, meta_props)
+    # single value line
+    # like: ##fileformat=VCFv4.0
+    if typeof(meta_props)<:AbstractString
+        return "##$key=$meta_props\n"
+    end
+
+    line = "##$key=<"
+    for (k,v) in meta_props
+        line *= "$k=$v,"
+    end
+    line = rstrip(line,',') * ">\n"
+    return line
 end
