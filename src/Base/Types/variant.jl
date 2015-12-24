@@ -1,4 +1,6 @@
 
+import DataStructures:OrderedDict
+
 """
 Variant type is typically used to represent a record of VCF
 See VCF spec:
@@ -28,7 +30,7 @@ function Variant(chrom::ASCIIString,pos::Int64,id::ASCIIString= ".",ref::ASCIISt
 end
 
 type VcfHeader
-    metas::Dict{ASCIIString, Array{Any, 1}}
+    metas::OrderedDict{ASCIIString, Array{Any, 1}}
     columns::Array{ASCIIString, 1}
-    VcfHeader() = new(Dict{ASCIIString, Array{Any, 1}}(), Array{ASCIIString, 1}())
+    VcfHeader() = new(OrderedDict{ASCIIString, Array{Any, 1}}(), Array{ASCIIString, 1}())
 end

@@ -1,3 +1,6 @@
+
+import DataStructures:OrderedDict
+
 """
 A column line is TAB separated, and is started with a single '#CHROM'
 #CHROM  POS ID  REF ALT QUAL    FILTER  INFO    FORMAT  A   B   C   D
@@ -59,7 +62,7 @@ function vcf_parse_meta(meta::ASCIIString)
         return inner
     end
     propstrs = split(inner, ",")
-    props = Dict{ASCIIString, Any}()
+    props = OrderedDict{ASCIIString, Any}()
     for p in propstrs
         k, v = vcf_parse_prop(ASCIIString(p))
         if v!= false
