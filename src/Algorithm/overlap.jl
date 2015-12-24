@@ -30,7 +30,7 @@ function overlap(r1::Sequence, r2::Sequence)
             end
         end
     end
-    return (0,0)
+    return (0,0,0)
 end
 
 function overlap(r1::FastqRead, r2::FastqRead)
