@@ -21,7 +21,8 @@ export opengene_open,
 export vcf_open,
 	vcf_close,
 	vcf_read_header,
-	vcf_write_header
+	vcf_write_header,
+	vcf_read
 
 include("common.jl")
 

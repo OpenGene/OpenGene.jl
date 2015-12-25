@@ -36,3 +36,13 @@ function vcf_write_header(stream::BufferedOutputStream, header::VcfHeader)
         return false
     end
 end
+
+function vcf_read(filename::AbstractString)
+    stream = vcf_open(filename)
+    if stream == false
+        return false
+    end
+    hd = vcf_read_header(stream)
+    df = readtable(stream, separator = '\t', header=false)
+    return Vcf(hd, df)
+end

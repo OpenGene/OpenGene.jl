@@ -34,3 +34,8 @@ type VcfHeader
     columns::Array{ASCIIString, 1}
     VcfHeader() = new(OrderedDict{ASCIIString, Array{Any, 1}}(), Array{ASCIIString, 1}())
 end
+
+type Vcf
+    header::VcfHeader
+    data::DataFrame
+end
