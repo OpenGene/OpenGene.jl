@@ -4,6 +4,9 @@ import BufferedStreams:
 	BufferedInputStream,
 	BufferedOutputStream
 
+# work around to avoid error that people like to close BufferedInputStream
+Base.close(stream::BufferedInputStream)=()
+
 # get the format of a file
 function getformat(filename::AbstractString)
 	format_extensions = Dict(
