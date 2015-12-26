@@ -1,5 +1,38 @@
 include("vcf_parser.jl")
 
+"""
+Load a VCF file into a Vcf object
+A Vcf object has .header and a .data field
+.data field is stored as a DataFrame
+"""
+function vcf_read(filename::AbstractString)
+    stream = vcf_open(filename)
+    if stream == false
+        return false
+    end
+    hd = vcf_read_header(stream)
+    df = readtable(stream, separator = '\t', header=false)
+
+    # update names of the dataframe
+    colnames = [symbol(col) for col in hd.columns]
+    names!(df, colnames)
+    return Vcf(hd, df)
+end
+
+"""
+Write a Vcf object into a file
+Vcf data field is tab-separated
+"""
+function vcf_write(filename::AbstractString, obj::Vcf)
+    stream = vcf_open(filename, "w")
+    if stream == false
+        return false
+    end
+    vcf_write_header(stream, obj.header)
+    vcf_write_data(stream, obj.data)
+    close(stream)
+end
+
 # open a vcf stream, mode should be either r or w
 function vcf_open(filename::AbstractString, mode::AbstractString="r")
     return opengene_open(filename, mode)
@@ -26,7 +59,7 @@ function vcf_read_header(stream::BufferedInputStream)
     end
 end
 
-# write a vcf header to a VcfHeader
+# write a vcf header to a file
 function vcf_write_header(stream::BufferedOutputStream, header::VcfHeader)
     try
         vcf_write_metas(stream, header)
@@ -37,16 +70,7 @@ function vcf_write_header(stream::BufferedOutputStream, header::VcfHeader)
     end
 end
 
-function vcf_read(filename::AbstractString)
-    stream = vcf_open(filename)
-    if stream == false
-        return false
-    end
-    hd = vcf_read_header(stream)
-    df = readtable(stream, separator = '\t', header=false)
-
-    # update names of the dataframe
-    colnames = [symbol(col) for col in hd.columns]
-    names!(df, colnames)
-    return Vcf(hd, df)
+# write vcf data field into stream
+function vcf_write_data(stream::BufferedOutputStream, data::DataFrame)
+    printtable(stream,data,header=false, separator='\t', quotemark='\0')
 end
