@@ -62,3 +62,12 @@ intervals = bed_read_intervals("in.bed")
 # write all records
 bed_write_intervals("out.bed",intervals)
 ```
+
+***read/write a VCF***
+```julia
+using OpenGene
+
+# load the entire VCF data into a vcf object, which has a .header field and a .data field
+vcfobj = vcf_read("in.vcf")
+# write the vcf object into a file
+vcf_write("out.vcf", vcfobj)
