@@ -106,8 +106,6 @@ end
 
 function vcf_write_metas(stream::BufferedOutputStream, header::VcfHeader)
     for (key, meta) in header.metas
-        println(key)
-        println(meta)
         for meta_props in meta
             line = vcf_make_line(key, meta_props)
             write(stream, line)
