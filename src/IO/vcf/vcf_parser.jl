@@ -10,7 +10,7 @@ function vcf_add_column_line(header::VcfHeader, columnline::ASCIIString)
         error("column line should start with #CHROM: $columnline")
         return false
     end
-    columnline = rstrip(columnline)
+    columnline = lstrip(rstrip(columnline), '#')
     columns = split(columnline, "\t")
     for col in columns
         vcf_add_column(header, ASCIIString(col))
@@ -20,7 +20,7 @@ end
 vcf_add_column(header::VcfHeader, column::ASCIIString) = push!(header.columns, column)
 
 function vcf_write_columns(stream::BufferedOutputStream, header::VcfHeader)
-    write(stream, join(header.columns, "\t"), "\n")
+    write(stream, "#", join(header.columns, "\t"), "\n")
 end
 
 """

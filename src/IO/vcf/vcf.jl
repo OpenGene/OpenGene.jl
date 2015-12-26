@@ -44,5 +44,9 @@ function vcf_read(filename::AbstractString)
     end
     hd = vcf_read_header(stream)
     df = readtable(stream, separator = '\t', header=false)
+
+    # update names of the dataframe
+    colnames = [symbol(col) for col in hd.columns]
+    names!(df, colnames)
     return Vcf(hd, df)
 end
