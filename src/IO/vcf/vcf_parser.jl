@@ -63,9 +63,31 @@ function vcf_parse_meta(meta::ASCIIString)
     end
     propstrs = split(inner, ",")
     props = OrderedDict{ASCIIString, Any}()
-    for p in propstrs
-        k, v = vcf_parse_prop(ASCIIString(p))
-        if v!= false
+    start = 1
+    inquote = false
+    afterslash = false
+    for i in 1:length(inner)
+        if inner[i] == '\\'
+            afterslash = true
+            continue
+        else
+            afterslash = false
+        end
+        if inner[i]=='"' && !afterslash
+            inquote = !inquote
+        end
+        if inner[i]==',' && !inquote
+            k, v = vcf_parse_prop(inner[start:i-1])
+            start = i + 1
+            if v != false
+                props[k] = v
+            end
+        end
+    end
+    # the last prop
+    if start < length(inner)
+        k, v = vcf_parse_prop(inner[start:length(inner)])
+        if v != false
             props[k] = v
         end
     end
@@ -74,6 +96,7 @@ end
 
 # parse ID=DP
 function vcf_parse_prop(prop::ASCIIString)
+    prop = strip(prop)
     if !contains(prop, "=")
         return (false, false)
     end
