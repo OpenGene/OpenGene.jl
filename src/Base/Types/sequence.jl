@@ -28,7 +28,7 @@ function aa(str::ASCIIString)
 	return Sequence(str, AA_SEQ)
 end
 
-const DNA_COMPLEMENT = Dict('A'=>'T', 'T'=>'A', 'C'=>'G', 'G'=>'C', 'N'=>'N')
+const DNA_COMPLEMENT = Dict('A'=>'T', 'T'=>'A', 'C'=>'G', 'G'=>'C', 'N'=>'N', 'a'=>'t', 't'=>'a', 'c'=>'g', 'g'=>'c')
 
 function complement(s::Sequence)
 	if s.seqtype == AA_SEQ
