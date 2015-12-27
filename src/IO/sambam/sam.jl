@@ -1,5 +1,20 @@
 
-bitstype 960 Struct_BGZF
+type Struct_BGZF
+    errs::UInt32 # unknown
+    cache_size::Int32
+    block_length::Int32
+    block_offset::Int32
+    block_address::Int64
+    uncompressed_address::Int64
+    uncompressed_block::Ptr{Void}
+    compressed_block::Ptr{Void}
+    cache::Ptr{Void}
+    fp::Ptr{Void}#Ptr{hFile}
+    mt::Ptr{Void}#Ptr{bgzf_mtaux_t}
+    idx::Ptr{Void}# Ptr{bgzidx_t}
+    idx_build_otf::Int32
+    gz_stream::Ptr{Void}#Ptr{z_stream}
+end
 typealias BGZF Struct_BGZF
 
 function bgzf_close(fp::BGZF)
