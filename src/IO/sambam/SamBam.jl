@@ -1,5 +1,7 @@
 module SamBam
 
+using Logging
+@Logging.configure(level=DEBUG)
 
 include("sam.jl")
 include("header.jl")

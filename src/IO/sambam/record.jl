@@ -76,8 +76,22 @@ function qname(record::Record)
     data(record) # need reimplement
 end
 type QName end
-type Cigar end
-type Seq end
+typealias Match UInt32
+typealias Ins   UInt32
+typealias Del   UInt32
+typealias RefSkip UInt32
+typealias SoftClip UInt32
+typealias HardClip UInt32
+typealias Pad UInt32
+typealias Equal UInt32
+typealias Diff UInt32
+typealias Back UInt32
+typealias Cigar Union{Match,Ins,Del,RefSkip,SoftClip,HardClip,Pad,Equal,Diff,Back}
+
+immutable Seq{T}
+    encode::T
+    len::UInt64
+end
 type Qual end
 function set(record::Record,qname::QName,cigar::Cigar,seq::Seq,qual::Qual)
     throw("set is big and not implemented now")
@@ -113,7 +127,7 @@ end
 
 # Auxiliary record data
 #@enum Aux "Int32(0)" "ASCIIString()" "Float64(0)" "Char(UInt32(0))"
-@enum Aux a_int32, a_asciistirng
+#@enum Aux int32 asciistirng
 
 function string(aux::Aux)
     error()
@@ -148,10 +162,8 @@ const ENCODE_BASE = [
 15,15,15,15, 15,15,15,15, 15,15,15,15, 15,15,15,15
 ];
 
-immutable Seq<T>
-    encode::T
-    len::UInt64
-end
+
+
 function encode_base(seq::Seq, i::UInt64)
     seq.encoded[i/2]>>((!i&i << 2)) & 0b1111
 end
@@ -164,10 +176,6 @@ end
 
 # operator for Seq not implemented here
 
-@enum Cigar Match(UInt32) Ins(UInt32) Del(UInt32)
-RefSkip(UInt32) SoftClip(UInt32) HardClip(UInt32)
-Pad(UInt32) Equal(Int32) Diff(UInt32) Back(Int32)
-end
 
 function encode(cigar::Cigar)
     error("Not implementd")

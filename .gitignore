@@ -2,3 +2,6 @@
 *.jl.*.cov
 *.jl.mem
 *.html
+*.jl~
+*.jl#
+

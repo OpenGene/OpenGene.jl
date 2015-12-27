@@ -99,7 +99,10 @@ end
 @enum BGZFError InvalidPath_2
 
 function bgzf_open(path, mode)
-    error()
+    @show typeof(path),typeof(mode)
+    println(path,mode)
+    ccall((:bgzf_open, "libhts"), Ptr{BGZF}, (Cstring, Cstring), path,mode)
+    
 end
 function itr_next(bgzf,itr,record)
     error()

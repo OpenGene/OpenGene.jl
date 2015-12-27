@@ -1,5 +1,5 @@
 
-@enum Struct_BGZF app=1 bpp=2
+bitstype 960 Struct_BGZF
 typealias BGZF Struct_BGZF
 
 function bgzf_close(fp::BGZF)
@@ -298,9 +298,10 @@ typealias seq_nt16_int Cint
 
 type Cvoid #unkown
 end
-
+#=
 function bgzf_open(_function::Cchar, mode::Cchar)
 end
+=#
 function hts_version()
 end
 function hts_detect_format(fp::Struct_hFILE, fmt::htsFormat)
@@ -375,7 +376,8 @@ function hts_file_type(functioname::Cchar)
 end
 function bam_hdr_init()
 end
-function bam_hdr_read(fp::BGZF)
+function bam_hdr_read(fp::Ptr{BGZF})
+    ccall((:bam_hdr_read,"libhts"), bam_hdr_t, (Ptr{BGZF},), fp)
 end
 function bam_hdr_write(fp::BGZF, h::bam_hdr_t)
 end

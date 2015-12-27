@@ -4,12 +4,12 @@ immutable HeaderRecord{T}
     # not sure
     tags::Array{Array{UInt8,1},1}
 
-    function HeaderRecord{T}(rec_type)
+    function HeaderRecord(rec_type)
         tags = Array{Array{UInt8,1},1}()
         new(rec_type, tags)
     end
 
-    function push_tag!{V <:ASCIIString }(header_record::HeaderRecord,tag,value)
+    function push_tag!(header_record::HeaderRecord,tag,value)
         push!(header_record.tags, into_bytes(String(value)))
     end
 
