@@ -12,7 +12,7 @@ function overlap(r1::Sequence, r2::Sequence)
     reverse_r2 = ~r2
 
     # a match of less than 5 is considered as unconfident
-    for offset = 0:length(r1)-5
+    for offset = 0:len1-5
         # the overlap length of r1 & r2 when r2 is move right for offset
         overlap_len = min(len1, (offset + len2 )) - offset
 
@@ -39,4 +39,13 @@ end
 
 function overlap(pair::FastqPair)
     return overlap(pair.read1, pair.read2)
+end
+
+function simple_merge(r1::Sequence, r2::Sequence, offset, overlap)
+    reverse = ~r2
+    if offset + overlap < length(r2)
+        return Sequence(r1.seq * reverse.seq[offset+overlap+1 : end])
+    else
+        return r1
+    end
 end
