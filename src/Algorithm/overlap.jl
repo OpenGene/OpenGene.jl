@@ -41,10 +41,10 @@ function overlap(pair::FastqPair)
     return overlap(pair.read1, pair.read2)
 end
 
-function simple_merge(r1::Sequence, r2::Sequence, offset, overlap)
+function simple_merge(r1::Sequence, r2::Sequence, overlap)
     reverse = ~r2
-    if offset + overlap < length(r2)
-        return Sequence(r1.seq * reverse.seq[offset+overlap+1 : end])
+    if overlap < length(r2)
+        return Sequence(r1.seq * reverse.seq[overlap+1 : end])
     else
         return r1
     end
