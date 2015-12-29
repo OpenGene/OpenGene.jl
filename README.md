@@ -7,7 +7,11 @@
 This project is just started and it need more bioinformaticians to contribute. If you want to be an author of OpenGene, please open an issue, or make a pull request.
 
 ## Add OpenGene
-This project hasn't been registered in Julia METADATA.jl, so if you want to use it, do:
+```
+# run on Julia REPL
+Pkg.add("OpenGene")
+```
+If you want to pull the latest dev version of OpenGene
 ```julia
 Pkg.clone("git://github.com/OpenGene/OpenGene.jl.git")
 
@@ -17,7 +21,7 @@ Pkg.build("OpenGene")
 
 This project is under active developing, remember to update it to get newest features:
 ```julia
-Pkg.update()
+Pkg.checkout("OpenGene")
 ```
 ## Examples
 ***read/write a single fastq/fasta file***
