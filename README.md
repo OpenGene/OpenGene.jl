@@ -8,7 +8,7 @@
 This project is just started and it need more bioinformaticians to contribute. If you want to be an author of OpenGene, please open an issue, or make a pull request.
 
 ## Add OpenGene
-```
+```julia
 # run on Julia REPL
 Pkg.add("OpenGene")
 ```
