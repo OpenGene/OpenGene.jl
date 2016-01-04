@@ -3,6 +3,7 @@
 [![Build Status](https://travis-ci.org/OpenGene/OpenGene.jl.svg?branch=master)](https://travis-ci.org/OpenGene/OpenGene.jl)
 [![Coverage Status](https://coveralls.io/repos/OpenGene/OpenGene.jl/badge.png?branch=master&serv\
 ice=github)](https://coveralls.io/github/OpenGene/OpenGene.jl?branch=master)
+
 `OpenGene.jl` project aims to provide basic functions and rich utilities to analyze sequencing data, with the beautiful language `Julia`   
 
 This project is just started and it need more bioinformaticians to contribute. If you want to be an author of OpenGene, please open an issue, or make a pull request.
