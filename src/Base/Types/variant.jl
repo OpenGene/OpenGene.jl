@@ -39,3 +39,12 @@ type Vcf
     header::VcfHeader
     data::DataFrame
 end
+
+function version(vcf::Vcf)
+    if "fileformat" in keys(vcf.header.metas)
+        vstr = replace(vcf.header.metas["fileformat"][1], "VCFv", "")
+        return VersionNumber(vstr)
+    else
+        return VersionNumber(0)
+    end
+end
