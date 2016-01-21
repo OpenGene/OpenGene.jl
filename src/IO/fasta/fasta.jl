@@ -12,7 +12,11 @@ function fasta_read(stream::BufferedInputStream)
 			return false
 		end
 		#will get '>' for the first record, trim it
-		name = lstrip(rstrip(readline(stream),'\n'), '>')
+		line = readline(stream)
+		while startswith(line, "#")
+			line = readline(stream)
+		end
+		name = lstrip(rstrip(line,'\n'), '>')
 		seq = rstrip(readuntil(stream, '>'),'>')
 
 		# remove the comments
