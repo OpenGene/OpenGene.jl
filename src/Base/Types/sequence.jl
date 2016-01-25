@@ -2,6 +2,9 @@ const DNA_SEQ = UInt8(0)
 const RNA_SEQ = UInt8(1)
 const AA_SEQ = UInt8(2)
 
+const DNA_ALPHABET = ['A', 'T', 'C', 'G', 'N']
+# for convinience, include 'C' in RNA alphabet
+const RNA_ALPHABET = ['A', 'T', 'C', 'G', 'U', 'N']
 const DNA_COMPLEMENT = Dict('A'=>'T', 'T'=>'A', 'C'=>'G', 'G'=>'C', 'N'=>'N', 'n'=>'n', 'a'=>'t', 't'=>'a', 'c'=>'g', 'g'=>'c')
 
 type Sequence
@@ -19,15 +22,32 @@ Base.reverse(s::Sequence) = Sequence(reverse(s.seq), s.seqtype)
 Base.display(s::Sequence) = display_sequence(s)
 
 function dna(str::ASCIIString)
+	ret = validate_sequence(str, DNA_ALPHABET)
+	if ret > 0
+		error("Unsupported DNA nucleotide symbol at pos $ret, value:", str[ret])
+	end
 	return Sequence(str, DNA_SEQ)
 end
 
 function rna(str::ASCIIString)
+	ret = validate_sequence(str, RNA_ALPHABET)
+	if ret > 0
+		error("Unsupported RNA nucleotide symbol at pos $ret, value:", str[ret])
+	end
 	return Sequence(str, RNA_SEQ)
 end
 
 function aa(str::ASCIIString)
 	return Sequence(str, AA_SEQ)
+end
+
+function validate_sequence(str::ASCIIString, alphabet)
+	for i in 1:length(str)
+		if !(uppercase(str[i]) in alphabet)
+			return i
+		end
+	end
+	return 0
 end
 
 function complement(s::Sequence)
