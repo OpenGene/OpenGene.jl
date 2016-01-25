@@ -2,6 +2,8 @@ const DNA_SEQ = UInt8(0)
 const RNA_SEQ = UInt8(1)
 const AA_SEQ = UInt8(2)
 
+const DNA_COMPLEMENT = Dict('A'=>'T', 'T'=>'A', 'C'=>'G', 'G'=>'C', 'N'=>'N', 'n'=>'n', 'a'=>'t', 't'=>'a', 'c'=>'g', 'g'=>'c')
+
 type Sequence
 	seq::ASCIIString
 	seqtype::UInt8
@@ -28,14 +30,17 @@ function aa(str::ASCIIString)
 	return Sequence(str, AA_SEQ)
 end
 
-const DNA_COMPLEMENT = Dict('A'=>'T', 'T'=>'A', 'C'=>'G', 'G'=>'C', 'N'=>'N', 'n'=>'n', 'a'=>'t', 't'=>'a', 'c'=>'g', 'g'=>'c')
-
 function complement(s::Sequence)
 	if s.seqtype == AA_SEQ
 		error("Amino acid sequence doesn't have reverse complement")
 	end
 	len = length(s)
-	arr = Char[ifelse(s[i] in keys(DNA_COMPLEMENT), DNA_COMPLEMENT[s[i]], 'N') for i in 1:len]
+	arr = Char['N' for i in 1:len]
+	for i in 1:len
+		if haskey(DNA_COMPLEMENT, s[i])
+			arr[i] = DNA_COMPLEMENT[s[i]]
+		end
+	end
 	return Sequence(ASCIIString(arr), s.seqtype)
 end
 
@@ -44,7 +49,12 @@ function reverse_complement(s::Sequence)
 		error("Amino acid sequence doesn't have reverse complement")
 	end
 	len = length(s)
-	arr = Char[ifelse(s[len-i+1] in keys(DNA_COMPLEMENT), DNA_COMPLEMENT[s[len-i+1]], 'N') for i in 1:len]
+	arr = Char['N' for i in 1:len]
+	for i in 1:len
+		if haskey(DNA_COMPLEMENT, s[len-i+1])
+			arr[i] = DNA_COMPLEMENT[s[len-i+1]]
+		end
+	end
 	return Sequence(ASCIIString(arr), s.seqtype)
 end
 
