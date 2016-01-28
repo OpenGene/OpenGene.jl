@@ -49,3 +49,13 @@ function simple_merge(r1::Sequence, r2::Sequence, overlap)
         return r1
     end
 end
+
+
+function try_merge(r1::Sequence, r2::Sequence; distance_threshold = 2, overlap_threshold = 20)
+    offset, overlap_len, distance = overlap(r1, r2)
+    if overlap_len < overlap_threshold || distance > distance_threshold
+        return false
+    else
+        return simple_merge(r1, r2, overlap_len)
+    end
+end

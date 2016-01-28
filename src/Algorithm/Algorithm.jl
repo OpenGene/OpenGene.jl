@@ -4,7 +4,8 @@ using OpenGene
 
 export edit_distance,
     overlap,
-    simple_merge
+    simple_merge,
+    try_merge
 
 include("distance.jl")
 include("overlap.jl")
