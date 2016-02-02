@@ -23,7 +23,10 @@ export Sequence,
 	!,
 	~
 
-export VcfHeader
+export VcfHeader,
+	Vcf,
+	GtfHeader,
+	Gtf
 
 import Base: convert,
         complement,
@@ -41,3 +44,4 @@ include("quality.jl")
 include("read.jl")
 include("interval.jl")
 include("variant.jl")
+include("gtf.jl")

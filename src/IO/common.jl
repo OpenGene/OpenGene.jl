@@ -66,3 +66,19 @@ function opengene_open(filename::AbstractString, mode::AbstractString="r")
 		return open(filename, mode) |> streamtype(filename, mode)
 	end
 end
+
+# write a dataframe without quote
+function write_dataframe(stream::BufferedOutputStream, data::DataFrame)
+    # we can use printtable function from DataFrames package if no quotemark printing is supported
+    # like: printtable(stream,data,header=false, separator='\t', quotemark='\0')
+    for i in 1:nrow(data)
+        for j in 1:ncol(data)
+            print(stream, data[i, j])
+            if j<ncol(data)
+                print(stream, "\t")
+            else
+                print(stream, "\n")
+            end
+        end
+    end
+end

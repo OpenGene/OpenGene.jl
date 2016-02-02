@@ -71,18 +71,4 @@ function vcf_write_header(stream::BufferedOutputStream, header::VcfHeader)
 end
 
 # write vcf data field into stream
-function vcf_write_data(stream::BufferedOutputStream, data::DataFrame)
-    # we can use printtable function from DataFrames package if related pull request is merged
-    # https://github.com/JuliaStats/DataFrames.jl/pull/901
-    #printtable(stream,data,header=false, separator='\t', quotemark='\0')
-    for i in 1:nrow(data)
-        for j in 1:ncol(data)
-            print(stream, data[i, j])
-            if j<ncol(data)
-                print(stream, "\t")
-            else
-                print(stream, "\n")
-            end
-        end
-    end
-end
+vcf_write_data(stream::BufferedOutputStream, data::DataFrame) = write_dataframe(stream, data)

@@ -19,7 +19,9 @@ export opengene_open,
 	bed_write_intervals
 
 export vcf_read,
-	vcf_write
+	vcf_write,
+	gtf_read,
+	gtf_write
 
 include("common.jl")
 
@@ -28,5 +30,6 @@ include("fastq/fastq.jl")
 include("fasta/fasta.jl")
 include("beds/bed.jl")
 include("vcf/vcf.jl")
+include("gtf/gtf.jl")
 
 
