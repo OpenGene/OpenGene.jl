@@ -22,3 +22,14 @@ function edit_distance(s1::ASCIIString, s2::ASCIIString)
     end
     return tbl[i,j]
 end
+
+function hamming_distance(s1::ASCIIString, s2::ASCIIString)
+    d = 0
+    len = min(length(s1), length(s2))
+    for i in 1:len
+        if s1[i] != s2[i]
+            d += 1
+        end
+    end
+    return d
+end
