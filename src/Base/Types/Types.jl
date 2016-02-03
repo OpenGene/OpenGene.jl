@@ -26,6 +26,8 @@ export Sequence,
 export VcfHeader,
 	Vcf,
 	GtfHeader,
+	GtfItem,
+	GtfData,
 	Gtf
 
 import Base: convert,

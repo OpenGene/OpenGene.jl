@@ -39,9 +39,9 @@ function gtf_read(filename::AbstractString)
         skipped += 1
     end
 
-    df = readtable(stream, separator = '\t', header=false)
+    data = gtf_read_data(stream)
 
-    return Gtf(hd, df)
+    return Gtf(hd, data)
 end
 
 function gtf_read_header(stream::BufferedInputStream)
@@ -67,6 +67,33 @@ function gtf_read_header(stream::BufferedInputStream)
     return header
 end
 
+function gtf_read_data(stream::BufferedInputStream)
+    data = GtfData()
+    while true
+        if eof(stream)
+            return data
+        end
+        line = readline(stream)
+        line = rstrip(line, '\n')
+        items = split(line, "\t")
+        if length(items) < 9
+                continue
+        end
+        seqname = items[1]
+        source = items[2]
+        feature = items[3]
+        start_pos = parse(Int64,items[4])
+        end_pos = parse(Int64,items[5])
+        score = items[6]
+        strand = items[7]
+        frame = items[8]
+        attribute = items[9]
+        gtfitem = GtfItem(seqname, source, feature, start_pos, end_pos, score, strand, frame, attribute)
+        push!(data, gtfitem)
+    end
+    return data
+end
+
 # write a gtf header to a file
 function gtf_write_header(stream::BufferedOutputStream, header::GtfHeader)
     try
@@ -80,4 +107,16 @@ function gtf_write_header(stream::BufferedOutputStream, header::GtfHeader)
 end
 
 # write gtf data field into stream
-gtf_write_data(stream::BufferedOutputStream, data::DataFrame) = write_dataframe(stream, data)
+function gtf_write_data(stream::BufferedOutputStream, data::GtfData)
+    for item in data
+        print(stream, item.seqname, "\t")
+        print(stream, item.source, "\t")
+        print(stream, item.feature, "\t")
+        print(stream, item.start_pos, "\t")
+        print(stream, item.end_pos, "\t")
+        print(stream, item.score, "\t")
+        print(stream, item.strand, "\t")
+        print(stream, item.frame, "\t")
+        print(stream, item.attribute, "\n")
+    end
+end
