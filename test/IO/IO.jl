@@ -17,3 +17,5 @@ function test_gz_reading()
 end
 
 @test test_gz_reading()
+
+include("vcf.jl")
