@@ -1,3 +1,5 @@
+include("gtf_parser.jl")
+
 # open a gtf stream, mode should be either r or w
 function gtf_open(filename::AbstractString, mode::AbstractString="r")
     return opengene_open(filename, mode)
@@ -87,8 +89,8 @@ function gtf_read_data(stream::BufferedInputStream)
         score = items[6]
         strand = items[7]
         frame = items[8]
-        attribute = items[9]
-        gtfitem = GtfItem(seqname, source, feature, start_pos, end_pos, score, strand, frame, attribute)
+        attributes = gtf_parse_attributes(ASCIIString(items[9]))
+        gtfitem = GtfItem(seqname, source, feature, start_pos, end_pos, score, strand, frame, attributes)
         push!(data, gtfitem)
     end
     return data
@@ -117,6 +119,18 @@ function gtf_write_data(stream::BufferedOutputStream, data::GtfData)
         print(stream, item.score, "\t")
         print(stream, item.strand, "\t")
         print(stream, item.frame, "\t")
-        print(stream, item.attribute, "\n")
+        gtf_print_attributes(item.attributes, stream)
+        print(stream, "\n")
+    end
+end
+
+function gtf_print_attributes(attributes, stream)
+    i = 0
+    for (key, value) in attributes
+        print(stream, "$key $value;")
+        i += 1
+        if i < length(attributes)
+            print(stream, "  ")
+        end
     end
 end

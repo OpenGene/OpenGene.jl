@@ -25,7 +25,7 @@ type GtfItem
     score::ASCIIString
     strand::ASCIIString
     frame::ASCIIString
-    attribute::ASCIIString
+    attributes::OrderedDict{ASCIIString, ASCIIString}
 end
 
 typealias GtfData Array{GtfItem, 1}
