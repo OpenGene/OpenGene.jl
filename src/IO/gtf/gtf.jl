@@ -24,7 +24,7 @@ end
 """
 Load a GTF file as a DataFrame
 """
-function gtf_read(filename::AbstractString)
+function gtf_read(filename::AbstractString; loaddata = true)
     stream = gtf_open(filename)
     if stream == false
         return false
@@ -41,9 +41,69 @@ function gtf_read(filename::AbstractString)
         skipped += 1
     end
 
-    data = gtf_read_data(stream)
+    data = GtfData()
+    if loaddata
+        data = gtf_read_data(stream)
+    end
 
-    return Gtf(hd, data)
+    return Gtf(hd, data), stream
+end
+
+# read a row from a gtf stream, and just return it
+function gtf_read_row(stream::BufferedInputStream)
+    if eof(stream)
+        return false
+    end
+    line = readline(stream)
+    gtfitem = make_gtf_row(line)
+    return gtfitem
+end
+
+# read a row from a gtf stream, and write it into the gtf struct
+function gtf_read_row!(gtf::Gtf, stream::BufferedInputStream)
+    if eof(stream)
+        return false
+    end
+    line = readline(stream)
+    gtfitem = make_gtf_row(line)
+    if gtfitem != false
+        push!(gtf.data, gtfitem)
+    end
+    return gtfitem
+end
+
+function gtf_read_data(stream::BufferedInputStream)
+    data = GtfData()
+    while true
+        if eof(stream)
+            return data
+        end
+        line = readline(stream)
+        gtfitem = make_gtf_row(line)
+        if gtfitem != false
+            push!(data, gtfitem)
+        end
+    end
+    return data
+end
+
+function make_gtf_row(line)
+    line = rstrip(line, '\n')
+    items = split(line, "\t")
+    if length(items) < 9
+        return false
+    end
+    seqname = items[1]
+    source = items[2]
+    feature = items[3]
+    start_pos = parse(Int64,items[4])
+    end_pos = parse(Int64,items[5])
+    score = items[6]
+    strand = items[7]
+    frame = items[8]
+    attributes = gtf_parse_attributes(ASCIIString(items[9]))
+    gtfitem = GtfItem(seqname, source, feature, start_pos, end_pos, score, strand, frame, attributes)
+    return gtfitem
 end
 
 function gtf_read_header(stream::BufferedInputStream)
@@ -67,33 +127,6 @@ function gtf_read_header(stream::BufferedInputStream)
         end
     end
     return header
-end
-
-function gtf_read_data(stream::BufferedInputStream)
-    data = GtfData()
-    while true
-        if eof(stream)
-            return data
-        end
-        line = readline(stream)
-        line = rstrip(line, '\n')
-        items = split(line, "\t")
-        if length(items) < 9
-                continue
-        end
-        seqname = items[1]
-        source = items[2]
-        feature = items[3]
-        start_pos = parse(Int64,items[4])
-        end_pos = parse(Int64,items[5])
-        score = items[6]
-        strand = items[7]
-        frame = items[8]
-        attributes = gtf_parse_attributes(ASCIIString(items[9]))
-        gtfitem = GtfItem(seqname, source, feature, start_pos, end_pos, score, strand, frame, attributes)
-        push!(data, gtfitem)
-    end
-    return data
 end
 
 # write a gtf header to a file

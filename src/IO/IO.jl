@@ -21,6 +21,8 @@ export opengene_open,
 export vcf_read,
 	vcf_write,
 	gtf_read,
+	gtf_read_row,
+	gtf_read_row!,
 	gtf_write
 
 include("common.jl")
