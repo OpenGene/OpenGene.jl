@@ -17,6 +17,9 @@ include("IO/IO.jl")
 # module OpenGene.Algorithm
 include("Algorithm/Algorithm.jl")
 
+# module OpenGene.Reference
+include("Reference/Reference.jl")
+
 include("utils/print.jl")
 
 end # module
