@@ -9,6 +9,7 @@ type GencodeTranscript
     id::ASCIIString
     start_pos::Int64
     end_pos::Int64
+    attributes::OrderedDict{ASCIIString, ASCIIString}
     exons::Array{GencodeExon, 1}
 end
 
@@ -25,7 +26,7 @@ end
 """
 reference->chromosome dict->gene list->transcript list->exon list
 """
-function load_gencode(filename::AbstractString)
+function gencode_load(filename::AbstractString)
     cache_path = "$filename.v$GENCODE_INDEX_VER.idx"
     loaded = false
     # load the index from a cache file
@@ -79,7 +80,7 @@ function parse_gencode(filename::AbstractString)
             push!(index[row.seqname], gene)
         elseif row.feature == "transcript"
             transcript_id = strip(row.attributes["transcript_id"], '"')
-            transcript = GencodeTranscript(transcript_id, row.start_pos, row.end_pos, Array{GencodeExon, 1}())
+            transcript = GencodeTranscript(transcript_id, row.start_pos, row.end_pos, row.attributes, Array{GencodeExon, 1}())
             if gene == nothing
                 error("wrong format")
             end
@@ -96,8 +97,8 @@ function parse_gencode(filename::AbstractString)
     return index
 end
 
-# find which gene chr::pos locates in 
-function search_gene(index, chr, pos)
+# find which gene and which exon chr::pos locates in 
+function gencode_locate(index, chr, pos)
     if !haskey(index, chr)
         return false
     end
@@ -144,8 +145,30 @@ function search_gene(index, chr, pos)
     for s in search_left:search_right
         gene = genes[s]
         if gene.start_pos <= pos && gene.end_pos >= pos
-            push!(matches, gene)
+            result = search_in_gene(gene, pos)
+            if result != false
+                push!(matches, result)
+            end
         end
     end
     return matches
+end
+
+function search_in_gene(gene, pos)
+    for t in gene.transcripts
+        if t.start_pos>pos || t.end_pos < pos
+            continue
+        end
+        if !haskey(t.attributes, "tag") || !contains(t.attributes["tag"], "basic")
+            continue
+        end
+        for exon in t.exons
+            if exon.start_pos<=pos && exon.end_pos>=pos
+                return Dict("gene"=>gene.name, "transcript"=>t.id, "type"=>"exon", "number"=>exon.number)
+            elseif exon.start_pos>pos
+                return Dict("gene"=>gene.name, "transcript"=>t.id, "type"=>"intron", "number"=>exon.number - 1)
+            end
+        end
+    end
+    return false
 end
