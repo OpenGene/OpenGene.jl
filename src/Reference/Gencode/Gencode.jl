@@ -1,6 +1,12 @@
 
 export parse_gencode
 
+type Exon
+    number::Int32
+    start_pos::Int64
+    end_pos::Int64
+end
+
 """
 reference->chromosome dict->gene list->transcript list->exon list
 """
@@ -30,17 +36,12 @@ function parse_gencode(filename::AbstractString)
             transcript["end"] = row.end_pos
             transcript["exons"] = []
             if !haskey(gene, "transcripts")
-                println(gene)
                 error("wrong format")
             end
             push!(gene["transcripts"], transcript)
         elseif row.feature == "exon"
-            exon = Dict()
             exon_number = strip(row.attributes["exon_number"], '"')
-            exon["name"] = strip(row.attributes["gene_name"], '"')
-            exon["number"] = exon_number
-            exon["start"] = row.start_pos
-            exon["end"] = row.end_pos
+            exon = Exon(parse(Int32, exon_number), row.start_pos, row.end_pos)
             if !haskey(transcript, "exons")
                 error("wrong format")
             end
