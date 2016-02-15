@@ -41,12 +41,15 @@ function gtf_read(filename::AbstractString; loaddata = true)
         skipped += 1
     end
 
-    data = GtfData()
+    # if loaddata is set true, then only return the gtf object
+    # else also return the stream
     if loaddata
         data = gtf_read_data(stream)
+        return return Gtf(hd, data)
+    else
+        data = GtfData()
+        return Gtf(hd, data), stream
     end
-
-    return Gtf(hd, data), stream
 end
 
 # read a row from a gtf stream, and just return it
