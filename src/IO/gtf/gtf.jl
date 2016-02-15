@@ -160,7 +160,14 @@ end
 function gtf_print_attributes(attributes, stream)
     i = 0
     for (key, value) in attributes
-        print(stream, "$key $value;")
+        vars = split(value, "/")
+        for v in 1:length(vars)
+            var = vars[v]
+            print(stream, "$key $var;")
+            if v < length(vars)
+                print(stream, "  ")
+            end
+        end
         i += 1
         if i < length(attributes)
             print(stream, "  ")

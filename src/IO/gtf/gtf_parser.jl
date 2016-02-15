@@ -15,7 +15,11 @@ function gtf_parse_attributes(str::ASCIIString)
         value = ASCIIString(item[pos+1:length(item)])
         key = strip(key)
         value = strip(value)
-        attributes[key] = value
+        if haskey(attributes, key)
+            attributes[key] *= "/$value"
+        else
+            attributes[key] = value
+        end
     end
     return attributes
 end
