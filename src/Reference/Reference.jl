@@ -4,7 +4,8 @@ using OpenGene
 
 import DataStructures:OrderedDict
 
-export parse_gencode
+export load_gencode,
+    search_gene
 
 include("Gencode/Gencode.jl")
 
