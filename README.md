@@ -76,3 +76,21 @@ using OpenGene
 vcfobj = vcf_read("in.vcf")
 # write the vcf object into a file
 vcf_write("out.vcf", vcfobj)
+```
+
+***read/write a GTF***
+```julia
+using OpenGene
+
+# load the gtf header and data
+gtfobj = gtf_read("in.gtf")
+
+# write the gtf object into a file
+gtf_write("out.gtf", gtfobj)
+
+# if the file is too big, use following to load header only
+gtfobj, stream = gtf_read("in.gtf", loaddata = false)
+while (row = gtf_read_row(stream)) != false
+    # do something with row ...
+end
+```
