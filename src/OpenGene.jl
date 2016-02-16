@@ -20,6 +20,9 @@ include("Algorithm/Algorithm.jl")
 # module OpenGene.Reference
 include("Reference/Reference.jl")
 
+# Settings
+include("Settings/Settings.jl")
+
 include("utils/print.jl")
 
 end # module
