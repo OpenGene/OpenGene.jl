@@ -94,3 +94,18 @@ while (row = gtf_read_row(stream)) != false
     # do something with row ...
 end
 ```
+
+***locate the gene/exon/intron***
+```julia
+using OpenGene, OpenGene.Reference
+
+# load the gencode dataset, it will download a file from gencode website if it not downloaded before
+# once it's loaded, it will be cached so future loads will be fast
+index = gencode_load("GRCh37")
+
+# locate which gene chr:pos is in
+gencode_locate(index, "chr5", 149526621)
+# it will return
+# 1-element Array{Any,1}:
+#  Dict{ASCIIString,Any}("gene"=>"PDGFRB","number"=>1,"transcript"=>"ENST00000261799.4","type"=>"intron")
+```
