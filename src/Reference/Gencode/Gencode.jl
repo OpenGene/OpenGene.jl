@@ -1,3 +1,5 @@
+include("config.jl")
+
 const GENCODE_INDEX_VER = 1
 immutable GencodeExon
     number::Int32
@@ -26,7 +28,25 @@ end
 """
 reference->chromosome dict->gene list->transcript list->exon list
 """
-function gencode_load(filename::AbstractString)
+function gencode_load(ref::ASCIIString)
+    ref = lowercase(ref)
+    if !haskey(gencode_releases, ref)
+        error("$ref is not supported in current gencode releases, please use one of grch37/grch38, or hg19:")
+    end
+    source = gencode_releases[ref]["source"]
+    localfile = gencode_releases[ref]["localfile"]
+    if !isfile(localfile)
+        println("# gencode dataset is not downloaded, download it now...")
+        try
+            download(source, localfile)
+        catch(e)
+            error("Failed to download gencode reference from $source, please manually download it and put it at $localfile")
+        end
+    end
+    return gencode_load_file(localfile)
+end
+
+function gencode_load_file(filename::AbstractString)
     cache_path = "$filename.v$GENCODE_INDEX_VER.idx"
     loaded = false
     # load the index from a cache file
