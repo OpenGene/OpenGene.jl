@@ -63,16 +63,20 @@ function search_in_gene(gene, pos)
         if !haskey(t.attributes, "tag") || !contains(t.attributes["tag"], "basic")
             continue
         end
-        range = 1:length(t.exons)
-        if gene.strand == "-"
-            range = length(t.exons):-1:1
-        end
-        for i in range
-            exon = t.exons[i]
-            if exon.start_pos<=pos && exon.end_pos>=pos
-                return Dict("gene"=>gene.name, "transcript"=>t.id, "type"=>"exon", "number"=>exon.number)
-            elseif exon.start_pos>pos
-                return Dict("gene"=>gene.name, "transcript"=>t.id, "type"=>"intron", "number"=>exon.number - 1)
+        for exon in t.exons
+            # strand is -, then exons are aligned big coord -> small coord
+            if gene.strand == "-"
+                if exon.start_pos<=pos && exon.end_pos>=pos
+                    return Dict("gene"=>gene.name, "transcript"=>t.id, "type"=>"exon", "number"=>exon.number)
+                elseif exon.end_pos<pos
+                    return Dict("gene"=>gene.name, "transcript"=>t.id, "type"=>"intron", "number"=>exon.number - 1)
+                end
+            else
+                if exon.start_pos<=pos && exon.end_pos>=pos
+                    return Dict("gene"=>gene.name, "transcript"=>t.id, "type"=>"exon", "number"=>exon.number)
+                elseif exon.start_pos>pos
+                    return Dict("gene"=>gene.name, "transcript"=>t.id, "type"=>"intron", "number"=>exon.number - 1)
+                end
             end
         end
     end
