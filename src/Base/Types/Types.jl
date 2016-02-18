@@ -1,5 +1,7 @@
 export Sequence,
 	Quality,
+	qual_num,
+	qual_str,
 	SeqRead,
 	FastaRead,
 	FastqRead,

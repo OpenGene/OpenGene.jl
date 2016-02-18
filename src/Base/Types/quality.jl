@@ -11,3 +11,29 @@ Base.getindex(q::Quality, indx::AbstractArray{Int64,1}) = Quality(getindex(q.qua
 Base.reverse(q::Quality) = Quality(reverse(q.qual))
 ==(s1::Quality, s2::Quality) = s1.qual == s2.qual
 -(s1::Quality) = Quality(reverse(s1.qual))
+
+function qual_num(q::Char)
+    return UInt8(q) - 33
+end
+
+function qual_str(q::Char)
+    qnum = qual_num(q)
+    str = "Q$qnum"
+    return str
+end
+
+function qual_str(qual::ASCIIString)
+    ret = ""
+    for i in 1: length(qual)
+        q = qual[i]
+        if i > 1
+            ret *= " "
+        end
+        ret *= qual_str(q)
+    end
+    return ret
+end
+
+function qual_str(qual::Quality)
+    return qual_str(qual.qual)
+end
