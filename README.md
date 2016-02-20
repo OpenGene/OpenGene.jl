@@ -25,6 +25,20 @@ This project is under active developing, remember to update it to get newest fea
 Pkg.checkout("OpenGene")
 ```
 ## Examples
+***sequence operation***
+```julia
+julia> using OpenGene
+
+julia> seq = dna("AAATTTCCCGGGATCGATCGATCG")
+AAATTTCCCGGGATCGATCGATCG
+# reverse complement operator
+julia> ~seq
+CGATCGATCGATCCCGGGAAATTT
+# complement operator
+julia> !seq
+TTTAAAGGGCCCTAGCTAGCTAGC
+```
+
 ***read/write a single fastq/fasta file***
 ```julia
 using OpenGene
