@@ -12,17 +12,14 @@ This project is just started and it need more bioinformaticians to contribute. I
 # run on Julia REPL
 Pkg.add("OpenGene")
 ```
-If you want to pull the latest dev version of OpenGene
+If you want to get the latest dev version of OpenGene
 ```julia
-Pkg.clone("git://github.com/OpenGene/OpenGene.jl.git")
-
-# you can build it to accelerate the loading (optional)
-Pkg.build("OpenGene")
+Pkg.checkout("OpenGene")
 ```
 
 This project is under active developing, remember to update it to get newest features:
 ```julia
-Pkg.checkout("OpenGene")
+Pkg.update()
 ```
 ## Examples
 ***sequence operation***
