@@ -119,4 +119,8 @@ gencode_locate(index, "chr5", 149526621)
 # it will return
 # 1-element Array{Any,1}:
 #  Dict{ASCIIString,Any}("gene"=>"PDGFRB","number"=>1,"transcript"=>"ENST00000261799.4","type"=>"intron")
+genes = gencode_genes(index, "TP53")
+# return an array with only one record
+genes[1].name, genes[1].chr, genes[1].start_pos, genes[1].end_pos
+# ("TP53","chr17",7565097,7590856)
 ```
