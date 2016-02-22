@@ -1,4 +1,4 @@
-const GENCODE_INDEX_VER = 1
+const GENCODE_INDEX_VER = 2
 
 immutable GencodeExon
     number::Int32
@@ -16,6 +16,7 @@ end
 
 type GencodeGene
     name::ASCIIString
+    chr::ASCIIString
     id::ASCIIString
     start_pos::Int64
     end_pos::Int64
@@ -92,7 +93,7 @@ function parse_gencode(filename::AbstractString)
         if row.feature == "gene"
             gene_id = strip(row.attributes["gene_id"], '"')
             gene_name = strip(row.attributes["gene_name"], '"')
-            gene = GencodeGene(gene_name, gene_id, row.start_pos, row.end_pos, row.strand, row.attributes, Array{GencodeTranscript, 1}())
+            gene = GencodeGene(gene_name, row.seqname, gene_id, row.start_pos, row.end_pos, row.strand, row.attributes, Array{GencodeTranscript, 1}())
             if !haskey(index, row.seqname)
                 index[row.seqname] = []
             end
