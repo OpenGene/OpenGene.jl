@@ -1,3 +1,17 @@
+# get the transcript by Ensembl transcript id
+function gencode_transcript(index, tid)
+    for (chr, genelist) in index
+        for gene in genelist
+            for transcript in gene.transcripts
+                if transcript.id == tid
+                    return transcript
+                end
+            end
+        end
+    end
+    return nothing
+end
+
 # get gene details by gene name, return a gene list
 # for most cases, it will return a array with one record
 function gencode_genes(index, genename)
