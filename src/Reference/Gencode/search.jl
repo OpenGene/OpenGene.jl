@@ -1,3 +1,17 @@
+# get gene details by gene name, return a gene list
+# for most cases, it will return a array with one record
+function gencode_genes(index, genename)
+    genes = []
+    for (chr, genelist) in index
+        for gene in genelist
+            if gene.name == genename
+                push!(genes, gene)
+            end
+        end
+    end
+    return genes
+end
+
 # find which gene and which exon chr::pos locates in 
 function gencode_locate(index, chr, pos)
     if !haskey(index, chr)

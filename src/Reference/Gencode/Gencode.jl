@@ -4,7 +4,8 @@ export GencodeGene,
     GencodeExon,
     gencode_load,
     gencode_load_file,
-    gencode_locate
+    gencode_locate,
+    gencode_genes
 
 include("config.jl")
 include("index.jl")
