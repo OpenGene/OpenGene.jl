@@ -8,7 +8,9 @@
 
 `OpenGene.jl` project aims to provide basic functions and rich utilities to analyze sequencing data, with the beautiful language `Julia`   
 
-This project is just started and it need more bioinformaticians to contribute. If you want to be an author of OpenGene, please open an issue, or make a pull request.
+This project is just started and it need more bioinformaticians to contribute. If you want to be an author of OpenGene, please open an issue, or make a pull request.  
+
+If you are looking for BAM/SAM read/write, see [OpenGene/HTSLIB](https://github.com/OpenGene/HTSLIB.jl)
 
 ## Add OpenGene
 ```julia
