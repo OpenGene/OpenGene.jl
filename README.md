@@ -10,7 +10,8 @@
 
 This project is just started and it need more bioinformaticians to contribute. If you want to be an author of OpenGene, please open an issue, or make a pull request.  
 
-If you are looking for BAM/SAM read/write, see [OpenGene/HTSLIB](https://github.com/OpenGene/HTSLIB.jl)
+If you are looking for BAM/SAM read/write, see [OpenGene/HTSLIB](https://github.com/OpenGene/HTSLIB.jl)  
+Bug reports and feature requests, please [file an issue](https://github.com/OpenGene/OpenGene.jl/issues/new)
 
 ## Add OpenGene
 ```julia
