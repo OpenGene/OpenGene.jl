@@ -79,6 +79,20 @@ function reverse_complement(s::Sequence)
 	return Sequence(ASCIIString(arr), s.seqtype)
 end
 
+function transcribe(s::Sequence)
+	if s.seqtype != DNA_SEQ
+		error("Only DNA sequence can be transcribed")
+	end
+	len = length(s)
+	arr = Char[s.seq[i] for i in 1:len]
+	for i in 1:len
+		if s[i] == 'T'
+			arr[i] = 'U'
+		end
+	end
+	return rna(ASCIIString(arr))
+end
+
 ==(s1::Sequence, s2::Sequence) = (s1.seq == s2.seq) && (s1.seqtype == s2.seqtype)
 -(s1::Sequence) = reverse(s1)
 !(s1::Sequence) = complement(s1)
