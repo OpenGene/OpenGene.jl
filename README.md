@@ -37,9 +37,10 @@ dna:AAATTTCCCGGGATCGATCGATCG
 # reverse complement operator
 julia> ~seq
 dna:CGATCGATCGATCCCGGGAAATTT
-# complement operator
-julia> !seq
-dna:TTTAAAGGGCCCTAGCTAGCTAGC
+# transcribiton, note that seq is treated as coding sequence, not template sequence
+# so this operation only changes T to U
+julia> transcribe(seq)
+rna:CGAUCGAUCGAUCCCGGGAAAUUU
 ```
 
 ***read/write a single fastq/fasta file***
