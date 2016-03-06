@@ -20,6 +20,7 @@ Base.getindex(s::Sequence, r::UnitRange{Int64}) = Sequence(getindex(s.seq, r), s
 Base.getindex(s::Sequence, indx::AbstractArray{Int64,1}) = Sequence(getindex(s.seq, indx), s.seqtype)
 Base.reverse(s::Sequence) = Sequence(reverse(s.seq), s.seqtype)
 Base.display(s::Sequence) = display_sequence(s)
+Base.print(s::Sequence) = display_sequence(s)
 
 function dna(str::ASCIIString)
 	ret = validate_sequence(str, DNA_ALPHABET)
@@ -89,7 +90,7 @@ end
 function display_sequence(s::Sequence, limit::Int64 = 1000)
 	const prefix = Dict(DNA_SEQ=>"dna", RNA_SEQ=>"rna", AA_SEQ=>"aa")
 	len = length(s)
-	str = ""
+	str = prefix[s.seqtype]*":"
 	if len <= limit || limit <= 0
 		str = str * s.seq
 	else

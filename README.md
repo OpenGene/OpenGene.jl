@@ -33,13 +33,13 @@ Pkg.update()
 julia> using OpenGene
 
 julia> seq = dna("AAATTTCCCGGGATCGATCGATCG")
-AAATTTCCCGGGATCGATCGATCG
+dna:AAATTTCCCGGGATCGATCGATCG
 # reverse complement operator
 julia> ~seq
-CGATCGATCGATCCCGGGAAATTT
+dna:CGATCGATCGATCCCGGGAAATTT
 # complement operator
 julia> !seq
-TTTAAAGGGCCCTAGCTAGCTAGC
+dna:TTTAAAGGGCCCTAGCTAGCTAGC
 ```
 
 ***read/write a single fastq/fasta file***
