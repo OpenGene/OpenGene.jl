@@ -15,10 +15,10 @@ function overlap(r1::Sequence, r2::Sequence)
     overlap_len = 0
     offset = 0
     distance = 0
-    # a match of less than 5 is considered as unconfident
-    for offset = 0:len1-5
+    # a match of less than 10 is considered as unconfident
+    for offset = 0:len1-10
         # the overlap length of r1 & r2 when r2 is move right for offset
-        overlap_len = min(len1, (offset + len2 )) - offset
+        overlap_len = min(len1-offset, len2)
 
         # remind that Julia is a 1-based coordination system
         distance = edit_distance(r1.seq[offset+1 : offset+overlap_len], reverse_r2.seq[1 : overlap_len])
@@ -27,7 +27,7 @@ function overlap(r1::Sequence, r2::Sequence)
             # we verify it by moving r2 one more base to see if the distance is getting longer
             # if yes, then current is the best match, otherwise it's not
             next = offset + 1
-            next_overlap_len = min(len1, (next + len2 )) - next
+            next_overlap_len = min(len1-next, len2)
             distance2 = edit_distance(r1.seq[next+1 : next+next_overlap_len], reverse_r2.seq[1 : next_overlap_len])
             if distance <= distance2
                 overlaped = true
@@ -40,13 +40,13 @@ function overlap(r1::Sequence, r2::Sequence)
         # check if distance can get smaller if offset become negative
         # this only happens when insert DNA is shorter than sequencing read length, and some adapter/primer is sequenced and not trimmed cleanly
         # we go reversely
-        for offset = 0:-1:-min(len1, len2)
+        for offset = 0:-1:-(len2-10)
             # the overlap length of r1 & r2 when r2 is move right for offset
-            overlap_len = min(len1,  len2- abs(offset))
+            overlap_len = min(len1,  len2-abs(offset))
             distance = edit_distance(r1.seq[1:overlap_len], reverse_r2.seq[-offset + 1 : -offset + overlap_len])
             if distance <= distance_threshold(overlap_len)
                 next = offset - 1
-                next_overlap_len = min(len1,  len2- abs(next))
+                next_overlap_len = min(len1,  len2-abs(next))
                 distance2 = edit_distance(r1.seq[1:next_overlap_len], reverse_r2.seq[-next + 1 : -next + next_overlap_len])
                 if distance <= distance2
                     return (offset, overlap_len, distance)
