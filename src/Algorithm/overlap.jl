@@ -11,7 +11,7 @@ function overlap(r1::Sequence, r2::Sequence)
     len2 = length(r2)
     reverse_r2 = ~r2
 
-    overlaped = false
+    overlapped = false
     overlap_len = 0
     offset = 0
     distance = 0
@@ -30,13 +30,13 @@ function overlap(r1::Sequence, r2::Sequence)
             next_overlap_len = min(len1-next, len2)
             distance2 = edit_distance(r1.seq[next+1 : next+next_overlap_len], reverse_r2.seq[1 : next_overlap_len])
             if distance <= distance2
-                overlaped = true
+                overlapped = true
                 break
             end
         end
     end
 
-    if overlaped && offset == 0
+    if overlapped && offset == 0
         # check if distance can get smaller if offset goes negative
         # this only happens when insert DNA is shorter than sequencing read length, and some adapter/primer is sequenced but not trimmed cleanly
         # we go reversely
