@@ -37,8 +37,8 @@ function overlap(r1::Sequence, r2::Sequence)
     end
 
     if overlaped && offset == 0
-        # check if distance can get smaller if offset become negative
-        # this only happens when insert DNA is shorter than sequencing read length, and some adapter/primer is sequenced and not trimmed cleanly
+        # check if distance can get smaller if offset goes negative
+        # this only happens when insert DNA is shorter than sequencing read length, and some adapter/primer is sequenced but not trimmed cleanly
         # we go reversely
         for offset = 0:-1:-(len2-10)
             # the overlap length of r1 & r2 when r2 is move right for offset
