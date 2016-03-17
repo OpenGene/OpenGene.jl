@@ -33,3 +33,11 @@ function hamming_distance(s1::ASCIIString, s2::ASCIIString)
     end
     return d
 end
+
+function edit_distance(s1::Sequence, s2::Sequence)
+    return edit_distance(s1.seq, s2.seq)
+end
+
+function hamming_distance(s1::Sequence, s2::Sequence)
+    return hamming_distance(s1.seq, s2.seq)
+end
