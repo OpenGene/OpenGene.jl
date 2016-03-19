@@ -31,13 +31,19 @@ function parse_config()
             warn("each line in the config file should have format key = value")
             continue
         end
-        config[items[1]] = items[2]
+        key = strip(items[1])
+        value = strip(items[2])
+        config[key] = value
     end
     return config
 end
 
 function opengene_datadir()
+    config = parse_config()
     dir = opengene_homedir() * "/data"
+    if haskey(config, "data_folder")
+        dir = config["data_folder"]
+    end
     if !isdir(dir)
         try
             mkdir(dir)
