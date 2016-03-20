@@ -38,7 +38,8 @@ function gencode_load(ref::ASCIIString)
     if !isfile(localfile)
         println("# gencode dataset is not downloaded, download it now...")
         try
-            download(source, localfile)
+            download(source, localfile * ".part")
+            mv(localfile * ".part", localfile)
         catch(e)
             error("Failed to download gencode reference from $source, please manually download it and put it at $localfile")
         end
