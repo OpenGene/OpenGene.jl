@@ -10,7 +10,7 @@ const human_genomes = Dict(
     "hg38" => Dict(
         "localfile" => joinpath(genome_dir(), "hg38.chromFa.tar.gz"),
         "source" => "http://hgdownload.cse.ucsc.edu/goldenPath/hg38/bigZips/hg38.chromFa.tar.gz",
-        "md5" => "78e6954dcc82b50dfa2c86e93cfd62ec"
+        "md5" => "a5aa5da14ccf3d259c4308f7b2c18cb0"
     ),
     "hg19" => Dict(
         "localfile" => joinpath(genome_dir(), "hg19.chromFa.tar.gz"),
