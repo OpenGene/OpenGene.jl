@@ -1,18 +1,14 @@
 function opengene_homedir()
-    dir = homedir() * "/.OpenGene"
+    dir = joinpath(homedir(), ".OpenGene")
     if !isdir(dir)
-        try
-            mkdir(dir)
-        catch(e)
-            error("Cannot create folder $dir")
-        end
+        mkpath(dir)
     end
     return dir
 end
 
 function parse_config()
     homedir = opengene_homedir()
-    file = "$homedir/config.ini"
+    file = joinpath(homedir,"config.ini")
     config = Dict()
     if !isfile(file)
         return config
@@ -40,16 +36,12 @@ end
 
 function opengene_datadir()
     config = parse_config()
-    dir = opengene_homedir() * "/data"
+    dir = joinpath(opengene_homedir(), "data")
     if haskey(config, "data_folder")
         dir = config["data_folder"]
     end
     if !isdir(dir)
-        try
-            mkdir(dir)
-        catch(e)
-            error("Cannot create folder $dir")
-        end
+        mkpath(dir)
     end
     return dir
 end

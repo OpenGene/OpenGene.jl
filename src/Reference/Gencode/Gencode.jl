@@ -2,6 +2,7 @@
 export GencodeGene,
     GencodeTranscript,
     GencodeExon,
+    gencode_dir,
     gencode_load,
     gencode_load_file,
     gencode_locate,
