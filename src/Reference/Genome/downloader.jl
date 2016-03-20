@@ -3,8 +3,8 @@ function check_md5(file, hash)
     return true
 end
 
-function verify_human_genome_folder(folder)
-    chr_folder = joinpath(folder, "chroms")
+function verify_human_genome_folder(folder, subdir)
+    chr_folder = joinpath(folder, subdir)
     for chr in 1:22
         file = joinpath(chr_folder, "chr$chr.fa")
         if !isfile(file)
@@ -26,15 +26,15 @@ function download_genome(assembly)
         error("$assembly is not supported, please use hg19/hg38")
     end
 
+    fileinfo = human_genomes[assembly]
+
     # check if the assembly already exists
     folder = joinpath(genome_dir(), assembly)
     if isdir(folder)
-        if verify_human_genome_folder(folder)
+        if verify_human_genome_folder(folder, fileinfo["subdir"])
             return true
         end
     end
-
-    fileinfo = human_genomes[assembly]
 
     # download the reference
     if !isfile(fileinfo["localfile"]) || !check_md5(fileinfo["localfile"], fileinfo["md5"])
@@ -54,7 +54,7 @@ function download_genome(assembly)
     info("decompressing...")
     run(`tar -xvzf $gz -C $folder`)
 
-    if verify_human_genome_folder(folder)
+    if verify_human_genome_folder(folder, fileinfo["subdir"])
         return true
     else
         return false

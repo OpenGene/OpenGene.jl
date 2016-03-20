@@ -11,7 +11,9 @@ function load_genome(assembly)
         end
     end
 
-    chr_folder = joinpath(folder, "chroms")
+    fileinfo = human_genomes[assembly]
+
+    chr_folder = joinpath(folder, fileinfo["subdir"])
     chroms = readdir(chr_folder)
     genome = Dict{ASCIIString, FastaRead}()
     for chr in chroms
