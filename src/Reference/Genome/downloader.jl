@@ -32,7 +32,7 @@ function verify_human_genome_folder(folder, subdir)
     return true
 end
 
-function download_genome(assembly)
+function download_assembly(assembly)
     if !haskey(human_genomes, assembly)
         error("$assembly is not supported, please use hg19/hg38")
     end
@@ -40,7 +40,7 @@ function download_genome(assembly)
     fileinfo = human_genomes[assembly]
 
     # check if the assembly already exists
-    folder = joinpath(genome_dir(), assembly)
+    folder = joinpath(assembly_dir(), assembly)
     if isdir(folder)
         if verify_human_genome_folder(folder, fileinfo["subdir"])
             return true

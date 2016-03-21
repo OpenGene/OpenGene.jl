@@ -1,6 +1,6 @@
-export genome_dir,
-    download_genome,
-    load_genome
+export assembly_dir,
+    download_assembly,
+    load_assembly
 
 include("config.jl")
 include("downloader.jl")
