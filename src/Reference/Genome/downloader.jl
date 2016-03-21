@@ -1,6 +1,17 @@
-# dummy
-function check_md5(file, hash)
-    return true
+import SHA.sha1
+
+function check_sha1(file, hash)
+    info("checking SHA1...")
+    f = open(file)
+    filehash = sha1(f)
+    if filehash == hash
+        info("SHA1 OK")
+        return true
+    else
+        warn("wrong hash, expect $hash, but got $filehash")
+        return false
+    end
+    return false
 end
 
 function verify_human_genome_folder(folder, subdir)
@@ -37,15 +48,14 @@ function download_genome(assembly)
     end
 
     # download the reference
-    if !isfile(fileinfo["localfile"]) || !check_md5(fileinfo["localfile"], fileinfo["md5"])
+    if !isfile(fileinfo["localfile"]) || !check_sha1(fileinfo["localfile"], fileinfo["sha1"])
         info("start to download $assembly from " * fileinfo["source"])
         download(fileinfo["source"], fileinfo["localfile"]*".part")
         mv(fileinfo["localfile"]*".part", fileinfo["localfile"])
-    end
-
-    # check md5
-    if !check_md5(fileinfo["localfile"], fileinfo["md5"])
-        error("Failed to check MD5 integrity for " * fileinfo["localfile"])
+        # check sha1
+        if !check_sha1(fileinfo["localfile"], fileinfo["sha1"])
+            error("Failed to check sha1 integrity for " * fileinfo["localfile"])
+        end
     end
 
     # decompress
