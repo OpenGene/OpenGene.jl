@@ -34,7 +34,7 @@ function fasta_read(stream::BufferedInputStream)
 end
 
 # write a fasta read to a stream
-function fasta_write(stream::BufferedOutputStream, fa::FastaRead, linesize = 50)
+function fasta_write(stream::IOStream, fa::FastaRead, linesize = 50)
 	try
 		write(stream, ">", fa.name, "\n")
 		len = length(fa.sequence)

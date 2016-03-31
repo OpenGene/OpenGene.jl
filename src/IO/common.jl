@@ -1,8 +1,7 @@
 
 using Libz
 import BufferedStreams:
-	BufferedInputStream,
-	BufferedOutputStream
+	BufferedInputStream
 
 # work around to avoid error that people like to close BufferedInputStream
 Base.close(stream::BufferedInputStream)=()
@@ -37,7 +36,7 @@ function streamtype(filename::AbstractString, mode::AbstractString)
 	if iszipped(filename)
 		return contains(mode, "r")?ZlibInflateInputStream:ZlibDeflateOutputStream
 	else
-		return contains(mode, "r")?BufferedInputStream:BufferedOutputStream
+		return contains(mode, "r")?BufferedInputStream:IOStream
 	end
 end
 
@@ -61,14 +60,16 @@ function opengene_open(filename::AbstractString, mode::AbstractString="r")
 	# WAR to fix gz file reading issue of Libz
 	# https://github.com/BioJulia/Libz.jl/issues/9
 	if ZlibInflateInputStream == streamtype(filename, mode)
-		return ZlibInflateInputStream(open(filename, mode), reset_on_end=true)
-	else
-		return open(filename, mode) |> streamtype(filename, mode)
+        return ZlibInflateInputStream(open(filename, mode), reset_on_end=true)
+	elseif contains(mode, "w")
+        return open(filename, mode)
+    else
+        return open(filename, mode) |> streamtype(filename, mode)
 	end
 end
 
 # write a dataframe without quote
-function write_dataframe(stream::BufferedOutputStream, data::DataFrame)
+function write_dataframe(stream::IOStream, data::DataFrame)
     # we can use printtable function from DataFrames package if no quotemark printing is supported
     # like: printtable(stream,data,header=false, separator='\t', quotemark='\0')
     for i in 1:nrow(data)

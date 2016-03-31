@@ -5,7 +5,7 @@ function gtf_open(filename::AbstractString, mode::AbstractString="r")
     return opengene_open(filename, mode)
 end
 
-gtf_close(stream::BufferedOutputStream) = close(stream)
+gtf_close(stream::IOStream) = close(stream)
 
 """
 Write a Gtf object into a file
@@ -133,7 +133,7 @@ function gtf_read_header(stream::BufferedInputStream)
 end
 
 # write a gtf header to a file
-function gtf_write_header(stream::BufferedOutputStream, header::GtfHeader)
+function gtf_write_header(stream::IOStream, header::GtfHeader)
     try
         for (k, v) in header
             print(stream, "##", k, ": ", v, "\n")
@@ -145,7 +145,7 @@ function gtf_write_header(stream::BufferedOutputStream, header::GtfHeader)
 end
 
 # write gtf data field into stream
-function gtf_write_data(stream::BufferedOutputStream, data::GtfData)
+function gtf_write_data(stream::IOStream, data::GtfData)
     for item in data
         print(stream, item.seqname, "\t")
         print(stream, item.source, "\t")

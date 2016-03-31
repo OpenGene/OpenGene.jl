@@ -19,7 +19,7 @@ end
 
 vcf_add_column(header::VcfHeader, column::ASCIIString) = push!(header.columns, column)
 
-function vcf_write_columns(stream::BufferedOutputStream, header::VcfHeader)
+function vcf_write_columns(stream::IOStream, header::VcfHeader)
     write(stream, "#", join(header.columns, "\t"), "\n")
 end
 
@@ -104,7 +104,7 @@ function vcf_parse_prop(prop::ASCIIString)
     return (ASCIIString(key), ASCIIString(value))
 end
 
-function vcf_write_metas(stream::BufferedOutputStream, header::VcfHeader)
+function vcf_write_metas(stream::IOStream, header::VcfHeader)
     for (key, meta) in header.metas
         for meta_props in meta
             line = vcf_make_line(key, meta_props)

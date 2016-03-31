@@ -23,7 +23,7 @@ function fastq_read(stream::BufferedInputStream)
 end
 
 # write a fastq read to a stream
-function fastq_write(stream::BufferedOutputStream, fq::FastqRead)
+function fastq_write(stream::IOStream, fq::FastqRead)
 	try
 		strs = [fq.name, fq.sequence.seq, fq.strand, fq.quality.qual]
 		write(stream, join(strs, "\n")*"\n")
