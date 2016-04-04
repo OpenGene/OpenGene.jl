@@ -13,12 +13,16 @@ Base.reverse(q::Quality) = Quality(reverse(q.qual))
 ==(s1::Quality, s2::Quality) = s1.qual == s2.qual
 -(s1::Quality) = Quality(reverse(s1.qual))
 
-function qual_num(q::Char)
+function qual2num(q::Char)
     return UInt8(q) - 33
 end
 
+function num2qual(num::Int64)
+    return Char(num+33)
+end
+
 function qual_str(q::Char)
-    qnum = qual_num(q)
+    qnum = qual2num(q)
     str = "Q$qnum"
     return str
 end
