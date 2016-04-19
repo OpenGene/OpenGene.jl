@@ -6,12 +6,16 @@
 [![OpenGene](http://pkg.julialang.org/badges/OpenGene_0.4.svg)](http://pkg.julialang.org/?pkg=OpenGene)
 [![OpenGene](http://pkg.julialang.org/badges/OpenGene_0.5.svg)](http://pkg.julialang.org/?pkg=OpenGene)
 
-`OpenGene.jl` project aims to provide basic functions and rich utilities to analyze sequencing data, with the beautiful language `Julia`   
+`OpenGene.jl` project aims to provide basic functions and rich utilities to analyze sequencing data, with the beautiful language [Julia](http://julialang.org/)   
 
-This project is just started and it need more bioinformaticians to contribute. If you want to be an author of OpenGene, please open an issue, or make a pull request.  
+If you want to be an author of OpenGene, please open an issue, or make a pull request.  
 
 If you are looking for BAM/SAM read/write, see [OpenGene/HTSLIB](https://github.com/OpenGene/HTSLIB.jl)  
 Bug reports and feature requests, please [file an issue](https://github.com/OpenGene/OpenGene.jl/issues/new)
+
+## Julia
+Julia is a fresh programming language with `C/C++` like performance and `Python` like simple usage  
+On Ubuntu, you can install Julia by `sudo apt-get install julia`, and type `julia` to open Julia interactive prompt
 
 ## Add OpenGene
 ```julia
