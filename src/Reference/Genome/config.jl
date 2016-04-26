@@ -10,7 +10,7 @@ const human_genomes = Dict(
     "hg38" => Dict(
         "localfile" => joinpath(assembly_dir(), "hg38.chromFa.tar.gz"),
         "source" => "http://hgdownload.cse.ucsc.edu/goldenPath/hg38/bigZips/hg38.chromFa.tar.gz",
-        "sha1" => "6d0f69febb2212af46920d170ac811f49b159e8e",
+        "sha1" => "f459b51d6440f7342f3ddb38c33a1f945ded7cf2",
         "subdir" => "chroms"
     ),
     "hg19" => Dict(

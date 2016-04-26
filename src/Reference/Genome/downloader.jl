@@ -4,7 +4,7 @@ function check_sha1(file, hash)
     info("checking SHA1...")
     f = open(file)
     filehash = sha1(f)
-    if filehash == hash
+    if lowercase(filehash) == lowercase(hash)
         info("SHA1 OK")
         return true
     else
