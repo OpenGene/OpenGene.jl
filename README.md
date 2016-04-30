@@ -15,7 +15,7 @@ Bug reports and feature requests, please [file an issue](https://github.com/Open
 
 ## Julia
 Julia is a fresh programming language with `C/C++` like performance and `Python` like simple usage  
-On Ubuntu, you can install Julia by `sudo apt-get install julia`, and type `julia` to open Julia interactive prompt
+On Ubuntu, you can install Julia by `sudo apt-get install julia`, and type `julia` to open Julia interactive prompt. Details to install Julia is at [platform specific instructions](http://julialang.org/downloads/platform.html).
 
 ## Add OpenGene
 ```julia
