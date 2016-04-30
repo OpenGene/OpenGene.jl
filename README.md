@@ -135,3 +135,20 @@ genes = gencode_genes(index, "TP53")
 genes[1].name, genes[1].chr, genes[1].start_pos, genes[1].end_pos
 # ("TP53","chr17",7565097,7590856)
 ```
+
+***access assembly (hg19/hg38)***
+```julia
+julia> using OpenGene
+
+julia> using OpenGene.Reference
+
+julia> hg19 = load_assembly("hg19")
+# Dict{ASCIIString,OpenGene.FastaRead} with 93 entries:
+
+julia> hg19["chr17"]
+# >chr17
+# dna:AAGCTTCTCACCCTGTTCCTGCATAGATAATTGCATGACA......agggtgtgggtgtgggtgtgggtgtgggtgtggtgtgtgggtgtgggtgtgGT
+
+julia> hg19["chr17"].sequence[1:100]
+# dna:AAGCTTCTCACCCTGTTCCTGCATAGATAATTGCATGACAATTGCCTTGTCCCTGCTGAATGTGCTCTGGGGTCTCTGGGGTCTCACCCACGACCAACTC
+```
