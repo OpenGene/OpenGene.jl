@@ -72,5 +72,5 @@ function display_fastq_pair(pair::FastqPair)
 	println("----Read #1----")
 	display_fastq(pair.read1)
 	println("----Read #2----")
-	display_fastq(pair.read1)
+	display_fastq(pair.read2)
 end
