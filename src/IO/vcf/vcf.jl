@@ -1,4 +1,5 @@
 include("vcf_parser.jl")
+include("vcf_operation.jl")
 
 """
 Load a VCF file into a Vcf object

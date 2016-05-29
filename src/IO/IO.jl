@@ -25,6 +25,12 @@ export vcf_read,
 	gtf_read_row!,
 	gtf_write
 
+import Base:sort,
+	sort!
+
+export sort,
+	sort!
+
 include("common.jl")
 
 # for every file format, we create a folder
