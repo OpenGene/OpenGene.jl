@@ -1,5 +1,7 @@
 module Reference
 
+include("../compat.jl")
+
 using OpenGene
 
 import DataStructures:OrderedDict

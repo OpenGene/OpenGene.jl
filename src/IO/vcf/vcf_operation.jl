@@ -9,6 +9,17 @@ function sort(obj::Vcf)
     return Vcf(header, data)
 end
 
+function is_sorted(obj::Vcf)
+    df = obj.data
+    nrows = size(df, 1)
+    for i in 1:nrows-1
+        if df[i, 1] > df[i+1, 1] || (df[i, 1] == df[i+1, 1] && df[i, 2] > df[i+1, 2])
+            return false
+        end
+    end
+    return true
+end
+
 function union(obj1::Vcf, obj2::Vcf)
 
 end

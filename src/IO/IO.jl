@@ -29,7 +29,8 @@ import Base:sort,
 	sort!
 
 export sort,
-	sort!
+	sort!,
+	is_sorted
 
 include("common.jl")
 

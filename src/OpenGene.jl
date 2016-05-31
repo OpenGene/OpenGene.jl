@@ -8,6 +8,8 @@ module OpenGene
 
 using DataFrames
 
+include("compat.jl")
+
 # all code in Base should have no code dependency on others
 include("Base/Base.jl")
 

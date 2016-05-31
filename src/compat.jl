@@ -1,0 +1,2 @@
+import Compat:ASCIIString
+    readall

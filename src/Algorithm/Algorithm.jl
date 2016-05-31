@@ -1,5 +1,7 @@
 module Algorithm
 
+include("../compat.jl")
+
 using OpenGene
 
 export edit_distance,
