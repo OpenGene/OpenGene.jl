@@ -1,2 +1,2 @@
-import Compat:ASCIIString
+import Compat:ASCIIString,String
     readall
