@@ -1,7 +1,5 @@
 
-using Libz
-import BufferedStreams:
-	BufferedInputStream
+using GZip
 
 # get the format of a file
 function getformat(filename::AbstractString)
@@ -31,9 +29,9 @@ end
 # detect the stream type by its filename and mode
 function streamtype(filename::AbstractString, mode::AbstractString)
 	if iszipped(filename)
-		return contains(mode, "r")?ZlibInflateInputStream:ZlibDeflateOutputStream
+		return GZipStream
 	else
-		return contains(mode, "r")?BufferedInputStream:IOStream
+		return IOStream
 	end
 end
 
@@ -56,8 +54,8 @@ function opengene_open(filename::AbstractString, mode::AbstractString="r")
 	end
 	# WAR to fix gz file reading issue of Libz
 	# https://github.com/BioJulia/Libz.jl/issues/9
-	if ZlibInflateInputStream == streamtype(filename, mode)
-        return ZlibInflateInputStream(open(filename, mode), reset_on_end=true)
+	if GZipStream == streamtype(filename, mode)
+        return GZip.open(filename, mode)
 	elseif contains(mode, "w")
         return open(filename, mode)
     else
@@ -66,7 +64,7 @@ function opengene_open(filename::AbstractString, mode::AbstractString="r")
 end
 
 # write a dataframe without quote
-function write_dataframe(stream::IOStream, data::DataFrame)
+function write_dataframe(stream, data::DataFrame)
     # we can use printtable function from DataFrames package if no quotemark printing is supported
     # like: printtable(stream,data,header=false, separator='\t', quotemark='\0')
     for i in 1:nrow(data)

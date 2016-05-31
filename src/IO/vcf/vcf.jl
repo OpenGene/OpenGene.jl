@@ -39,9 +39,9 @@ function vcf_open(filename::AbstractString, mode::AbstractString="r")
     return opengene_open(filename, mode)
 end
 
-vcf_close(stream::IOStream) = close(stream)
+vcf_close(stream) = close(stream)
 
-function vcf_read_header(stream::BufferedInputStream)
+function vcf_read_header(stream)
     header = VcfHeader()
     while true
         if eof(stream)
@@ -61,7 +61,7 @@ function vcf_read_header(stream::BufferedInputStream)
 end
 
 # write a vcf header to a file
-function vcf_write_header(stream::IOStream, header::VcfHeader)
+function vcf_write_header(stream, header::VcfHeader)
     try
         vcf_write_metas(stream, header)
         vcf_write_columns(stream, header)
@@ -72,4 +72,4 @@ function vcf_write_header(stream::IOStream, header::VcfHeader)
 end
 
 # write vcf data field into stream
-vcf_write_data(stream::IOStream, data::DataFrame) = write_dataframe(stream, data)
+vcf_write_data(stream, data::DataFrame) = write_dataframe(stream, data)

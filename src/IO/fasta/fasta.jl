@@ -6,7 +6,7 @@ end
 
 # read the stream and return a fasta record
 # \n will be stripped automatically
-function fasta_read(stream::BufferedInputStream)
+function fasta_read(stream)
 	try
 		if eof(stream)
 			return false
@@ -34,7 +34,7 @@ function fasta_read(stream::BufferedInputStream)
 end
 
 # write a fasta read to a stream
-function fasta_write(stream::IOStream, fa::FastaRead, linesize = 50)
+function fasta_write(stream, fa::FastaRead, linesize = 50)
 	try
 		write(stream, ">", fa.name, "\n")
 		len = length(fa.sequence)

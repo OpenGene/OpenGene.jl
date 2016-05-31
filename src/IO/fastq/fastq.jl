@@ -6,7 +6,7 @@ end
 
 # read the stream and return a fastq record
 # \n will be stripped automatically
-function fastq_read(stream::BufferedInputStream)
+function fastq_read(stream)
 	try
 		if eof(stream)
 			return false
@@ -23,7 +23,7 @@ function fastq_read(stream::BufferedInputStream)
 end
 
 # write a fastq read to a stream
-function fastq_write(stream::IOStream, fq::FastqRead)
+function fastq_write(stream, fq::FastqRead)
 	try
 		strs = [fq.name, fq.sequence.seq, fq.strand, fq.quality.qual]
 		write(stream, join(strs, "\n")*"\n")
