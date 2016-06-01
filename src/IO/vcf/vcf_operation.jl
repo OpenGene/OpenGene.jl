@@ -9,7 +9,7 @@ function sort(obj::Vcf)
     return Vcf(header, data)
 end
 
-function is_sorted(obj::Vcf)
+function vcf_issorted(obj::Vcf)
     df = obj.data
     nrows = size(df, 1)
     for i in 1:nrows-1
@@ -23,3 +23,5 @@ end
 function union(obj1::Vcf, obj2::Vcf)
 
 end
+
+Base.issorted(obj::Vcf) = vcf_issorted(obj)
