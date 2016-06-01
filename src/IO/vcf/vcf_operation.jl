@@ -20,8 +20,16 @@ function vcf_issorted(obj::Vcf)
     return true
 end
 
-function union(obj1::Vcf, obj2::Vcf)
-
+function union(v1::Vcf, v2::Vcf)
+    if !issorted(v1)
+        info("The first vcf is not sorted, sort it now")
+        sort!(v1)
+    end
+    if !issorted(v2)
+        info("The second vcf is not sorted, sort it now")
+        sort!(v2)
+    end
+    result = nothing
 end
 
 Base.issorted(obj::Vcf) = vcf_issorted(obj)

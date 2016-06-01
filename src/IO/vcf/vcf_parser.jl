@@ -127,3 +127,23 @@ function vcf_make_line(key::ASCIIString, meta_props)
     line = rstrip(line,',') * ">\n"
     return line
 end
+
+function vcf_parse_data_line(line, separator='\t')
+    items = split(line, separator)
+    if length(items) < 8
+        return false
+    end
+    chrom = items[1]
+    pos = parse(Int64, items[2])
+    id = items[3]
+    ref = items[4]
+    alt = items[5]
+    qual = items[6]
+    filter = items[7]
+    info = items[8]
+    format = ""
+    if length(items) >= 9
+        format = items[9]
+    end
+    return Variant(chrom, pos, id, ref, alt, qual, filter, info, format)
+end

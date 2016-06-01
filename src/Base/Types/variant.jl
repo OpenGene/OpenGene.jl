@@ -37,7 +37,7 @@ end
 
 type Vcf
     header::VcfHeader
-    data::DataFrame
+    data::Array{Variant, 1}
 end
 
 function version(vcf::Vcf)

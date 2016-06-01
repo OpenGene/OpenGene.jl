@@ -12,12 +12,9 @@ function vcf_read(filename::AbstractString)
         return false
     end
     hd = vcf_read_header(stream)
-    df = readtable(stream, separator = '\t', header=false)
+    data = vcf_read_data(stream, '\t')
 
-    # update names of the dataframe
-    colnames = [symbol(col) for col in hd.columns]
-    names!(df, colnames)
-    return Vcf(hd, df)
+    return Vcf(hd, data)
 end
 
 """
@@ -32,6 +29,26 @@ function vcf_write(filename::AbstractString, obj::Vcf)
     vcf_write_header(stream, obj.header)
     vcf_write_data(stream, obj.data)
     close(stream)
+end
+
+function vcf_read_data(stream, separator = '\t')
+    data = Variant[]
+    while(true)
+        try
+            if eof(stream)
+                return data
+            end
+            line = rstrip(readline(stream),'\n')
+            var = vcf_parse_data_line(line, separator)
+            if var == false
+                continue
+            end
+            push!(data, var)
+        catch e
+            println(e)
+            return data
+        end
+    end
 end
 
 # open a vcf stream, mode should be either r or w
@@ -72,4 +89,27 @@ function vcf_write_header(stream, header::VcfHeader)
 end
 
 # write vcf data field into stream
-vcf_write_data(stream, data::DataFrame) = write_dataframe(stream, data)
+function vcf_write_data(stream, data)
+    has_format = false
+    for d in data
+        if d.format != ""
+            has_format = true
+            break
+        end
+    end
+    for d in data
+        write(stream, d.chrom)
+        write(stream, '\t', string(d.pos))
+        write(stream, '\t', d.id)
+        write(stream, '\t', d.ref)
+        write(stream, '\t', d.alt)
+        write(stream, '\t', d.qual)
+        write(stream, '\t', d.filter)
+        write(stream, '\t', d.info)
+        if has_format
+            write(stream, '\t', d.format)
+        end
+        write(stream, '\n')
+    end
+end
+
