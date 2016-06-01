@@ -25,7 +25,9 @@ export Sequence,
 	==,
 	-,
 	!,
-	~
+	~,
+	>,
+	<
 
 export VcfHeader,
 	Vcf,
@@ -38,7 +40,9 @@ import Base: convert,
 	==,
 	-,
 	!,
-	~
+	~,
+	>,
+	<
 
 if VERSION < v"0.5.0-"
     import Base:complement

@@ -1,19 +1,21 @@
 function sort!(obj::Vcf)
-    sort!(obj.data)
+    data = sort(obj.data, lt = <)
+    obj.data = data
     return obj
 end
 
 function sort(obj::Vcf)
-    data = sort(obj.data)
+    data = sort(obj.data, lt=var_comp)
     header = deepcopy(obj.header)
     return Vcf(header, data)
 end
 
 function vcf_issorted(obj::Vcf)
-    df = obj.data
-    nrows = size(df, 1)
-    for i in 1:nrows-1
-        if df[i, 1] > df[i+1, 1] || (df[i, 1] == df[i+1, 1] && df[i, 2] > df[i+1, 2])
+    data = obj.data
+    for i in 1:length(data)-1
+        v1 = data[i]
+        v2 = data[i+1]
+        if v1 > v2
             return false
         end
     end

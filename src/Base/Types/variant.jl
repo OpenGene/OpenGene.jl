@@ -48,3 +48,20 @@ function version(vcf::Vcf)
         return VersionNumber(0)
     end
 end
+
+function var_lt(v1::Variant, v2::Variant)
+    if v1.chrom < v2.chrom || (v1.chrom == v2.chrom && v1.pos < v2.pos)
+        return true
+    end
+    return false
+end
+
+function var_gt(v1::Variant, v2::Variant)
+    if v1.chrom > v2.chrom || (v1.chrom == v2.chrom && v1.pos > v2.pos)
+        return true
+    end
+    return false
+end
+
+<(v1::Variant, v2::Variant) = var_lt(v1, v2)
+>(v1::Variant, v2::Variant) = var_gt(v1, v2)
