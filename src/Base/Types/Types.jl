@@ -35,11 +35,14 @@ export VcfHeader,
 	Gtf
 
 import Base: convert,
-        complement,
 	==,
 	-,
 	!,
 	~
+
+@static if VERSION < v"0.5.0-"
+    import complement
+end
 
 export DNA_SEQ,
 	RNA_SEQ,
