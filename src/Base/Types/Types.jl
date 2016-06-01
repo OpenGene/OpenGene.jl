@@ -40,8 +40,8 @@ import Base: convert,
 	!,
 	~
 
-@static if VERSION < v"0.5.0-"
-    import complement
+if VERSION < v"0.5.0-"
+    import Base:complement
 end
 
 export DNA_SEQ,
