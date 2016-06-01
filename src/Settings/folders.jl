@@ -14,7 +14,12 @@ function parse_config()
         return config
     end
     io = open(file)
-    text = readall(io)
+    # TODO: work around for readall missing in master
+    if isdefined(Base, :readstring)
+        text = readstring(io)
+    else
+        text = readall(io)
+    end
     lines = split(text, '\n')
     for line in lines
         line = strip(line)
