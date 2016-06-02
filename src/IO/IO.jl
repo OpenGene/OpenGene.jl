@@ -25,12 +25,6 @@ export vcf_read,
 	gtf_read_row!,
 	gtf_write
 
-import Base:sort,
-	sort!
-
-export sort,
-	sort!,
-	is_sorted
 
 include("common.jl")
 
