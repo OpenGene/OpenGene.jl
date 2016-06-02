@@ -22,7 +22,7 @@ function vcf_issorted(obj::Vcf)
     return true
 end
 
-function union(v1::Vcf, v2::Vcf)
+function vcf_merge(v1::Vcf, v2::Vcf)
     if !issorted(v1)
         info("The first vcf is not sorted, sort it now")
         sort!(v1)
@@ -31,7 +31,53 @@ function union(v1::Vcf, v2::Vcf)
         info("The second vcf is not sorted, sort it now")
         sort!(v2)
     end
-    result = nothing
+    result = Array{Variant, 1}()
+    i = 1
+    j = 1
+    last_push = nothing
+    while i<=length(v1.data) || j<=length(v2.data)
+        take_v1 = true
+        if i>length(v1.data)
+            take_v1 = false
+        elseif j>length(v2.data)
+            take_v1 = true
+        else
+            if v1.data[i] < v2.data[j]
+                take_v1 = true
+            elseif v1.data[i] > v2.data[j]
+                take_v1 = false
+            else
+                # same position, check if they are identical
+                if v1.data[i].ref != v2.data[j].ref || v1.data[i].alt != v2.data[j].alt
+                    warn("mismatch discarded at ", v1.data[i].chrom, ":", v1.data[i].pos, " ", v1.data[i].ref, "-->", v1.data[i].alt, " vs ", v2.data[j].ref, "-->", v2.data[j].alt)
+                    i += 1
+                    j += 1
+                    continue
+                else
+                    # if identical, only take the one from v1, and skip this one from v2
+                    take_v1 = true
+                    j += 1
+                end
+            end
+        end
+        if take_v1
+            if last_push == nothing || last_push < v1.data[i]
+                push!(result, v1.data[i])
+                last_push = v1.data[i]
+            end
+            i += 1
+        else
+            if last_push == nothing || last_push < v2.data[j]
+                push!(result, v2.data[j])
+                last_push = v2.data[j]
+            end
+            j += 1
+        end
+    end
+    # use header only from v1
+    header = deepcopy(v1.header)
+    return Vcf(header, result)
 end
 
 Base.issorted(obj::Vcf) = vcf_issorted(obj)
+Base.merge(v1::Vcf, v2::Vcf) = vcf_merge(v1, v2)
