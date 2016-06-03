@@ -11,7 +11,7 @@ function vcf_read(filename::AbstractString)
         return false
     end
     hd = vcf_read_header(stream)
-    data = vcf_read_data(stream, '\t')
+    data = vcf_read_data(stream, vcf_has_format_column(hd), '\t')
 
     return Vcf(hd, data)
 end
@@ -30,7 +30,7 @@ function vcf_write(filename::AbstractString, obj::Vcf)
     close(stream)
 end
 
-function vcf_read_data(stream, separator = '\t')
+function vcf_read_data(stream, has_format, separator = '\t')
     data = Variant[]
     while(true)
         try
@@ -38,7 +38,7 @@ function vcf_read_data(stream, separator = '\t')
                 return data
             end
             line = rstrip(readline(stream),'\n')
-            var = vcf_parse_data_line(line, separator)
+            var = vcf_parse_data_line(line, has_format, separator)
             if var == false
                 continue
             end
@@ -107,6 +107,9 @@ function vcf_write_data(stream, data)
         write(stream, '\t', d.info)
         if has_format
             write(stream, '\t', d.format)
+        end
+        for s in d.samples
+            write(stream, '\t', s)
         end
         write(stream, '\n')
     end

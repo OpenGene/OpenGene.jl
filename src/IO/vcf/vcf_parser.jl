@@ -128,7 +128,7 @@ function vcf_make_line(key::ASCIIString, meta_props)
     return line
 end
 
-function vcf_parse_data_line(line, separator='\t')
+function vcf_parse_data_line(line, has_format, separator='\t')
     items = split(line, separator)
     if length(items) < 8
         return false
@@ -143,7 +143,14 @@ function vcf_parse_data_line(line, separator='\t')
     info = items[8]
     format = ""
     if length(items) >= 9
-        format = items[9]
+        if has_format
+            format = items[9]
+            samples_start = 10
+        end
     end
-    return Variant(chrom, pos, id, ref, alt, qual, filter, info, format)
+    samples = ASCIIString[]
+    for s = samples_start:length(items)
+        push!(samples, items[s])
+    end
+    return Variant(chrom, pos, id, ref, alt, qual, filter, info, format, samples)
 end

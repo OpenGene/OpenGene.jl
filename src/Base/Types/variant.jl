@@ -17,6 +17,7 @@ type Variant
     filter::ASCIIString
     info::ASCIIString
     format::ASCIIString
+    samples::Array{ASCIIString, 1}
 end
 
 """
@@ -25,8 +26,8 @@ requires: #CHROM, POS, ID, REF, ALT
 optionals: QUAL, FILTER, INFO, FORMAT
 """
 function Variant(chrom::ASCIIString,pos::Int64,id::ASCIIString= ".",ref::ASCIIString=".",alt::ASCIIString=".";
-        qual::ASCIIString="",filter::ASCIIString="",info::ASCIIString="",format::ASCIIString="")
-    return Variant(chrom, pos, id, ref, alt, qual, filter, info, format)
+        qual::ASCIIString="",filter::ASCIIString="",info::ASCIIString="",format::ASCIIString="", samples::Array{ASCIIString, 1}=Array{ASCIIString, 1}())
+    return Variant(chrom, pos, id, ref, alt, qual, filter, info, format, samples)
 end
 
 type VcfHeader
@@ -38,6 +39,26 @@ end
 type Vcf
     header::VcfHeader
     data::Array{Variant, 1}
+end
+
+function vcf_has_format_column(hd::VcfHeader)
+    return haskey(hd.metas, "FORMAT")
+end
+
+function vcf_has_format_column(vcf::Vcf)
+    return vcf_has_format_column(vcf.header)
+end
+
+function vcf_samples(vcf::Vcf)
+    samples = Array{ASCIIString, 1}()
+    columns = vcf.header.columns
+    const tags = [ "CHROM", "CHROM", "POS", "ID","REF", "ALT", "QUAL", "FILTER", "INFO", "FORMAT"]
+    for c in columns
+        if !(c in tags)
+            push!(samples, c)
+        end
+    end
+    return samples
 end
 
 function version(vcf::Vcf)
