@@ -30,7 +30,9 @@ export Sequence,
 	<,
 	sort,
 	sort!,
-	+
+	+,
+	*,
+	-
 
 export VcfHeader,
 	Vcf,
@@ -48,7 +50,9 @@ import Base: convert,
 	<,
 	sort,
 	sort!,
-	+
+	+,
+	*,
+	-
 
 if VERSION < v"0.5.0-"
     import Base:complement

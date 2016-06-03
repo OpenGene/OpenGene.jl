@@ -57,7 +57,7 @@ function var_lt(v1::Variant, v2::Variant)
 end
 
 function var_gt(v1::Variant, v2::Variant)
-    if v1.chrom > v2.chrom || (v1.chrom == v2.chrom && v1.pos == v2.pos && v1.id > v2.id)
+    if v1.chrom > v2.chrom || (v1.chrom == v2.chrom && v1.pos > v2.pos) || (v1.chrom == v2.chrom && v1.pos == v2.pos && v1.id > v2.id)
         return true
     end
     return false
@@ -147,7 +147,67 @@ function vcf_merge(v1::Vcf, v2::Vcf)
     return Vcf(header, result)
 end
 
+function vcf_intersect(v1::Vcf, v2::Vcf)
+    if !issorted(v1)
+        info("The first vcf is not sorted, sort it now")
+        sort!(v1)
+    end
+    if !issorted(v2)
+        info("The second vcf is not sorted, sort it now")
+        sort!(v2)
+    end
+    result = Array{Variant, 1}()
+    i = 1
+    j = 1
+    while i<=length(v1.data) && j<=length(v2.data)
+        if v1.data[i] < v2.data[j]
+            i += 1
+        elseif v1.data[i] > v2.data[j]
+            j += 1
+        else
+            if v1.data[i].ref == v2.data[j].ref && v1.data[i].alt == v2.data[j].alt
+                push!(result, v1.data[i])
+            end
+            i += 1
+            j += 1
+        end
+    end
+    # use header only from v1
+    header = deepcopy(v1.header)
+    return Vcf(header, result)
+end
+
+function vcf_minus(v1::Vcf, v2::Vcf)
+    common = v1 * v2
+    result = Array{Variant, 1}()
+    i = 1
+    j = 1
+    while i<=length(v1.data)
+        if j > length(common.data)
+            push!(result, v1.data[i])
+            i += 1
+            continue
+        end
+        if v1.data[i] < common.data[j]
+            push!(result, v1.data[i])
+            i += 1
+        elseif v1.data[i] > common.data[j]
+            j += 1
+        else
+            if v1.data[i].ref != common.data[j].ref || v1.data[i].alt != common.data[j].alt
+                push!(result, v1.data[i])
+            end
+            i += 1
+        end
+    end
+    # use header only from v1
+    header = deepcopy(v1.header)
+    return Vcf(header, result)
+end
+
 +(v1::Vcf, v2::Vcf) = vcf_merge(v1, v2)
+-(v1::Vcf, v2::Vcf) = vcf_minus(v1, v2)
+*(v1::Vcf, v2::Vcf) = vcf_intersect(v1, v2)
 
 Base.issorted(obj::Vcf) = vcf_issorted(obj)
 Base.merge(v1::Vcf, v2::Vcf) = vcf_merge(v1, v2)
