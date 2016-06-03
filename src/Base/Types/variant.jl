@@ -211,4 +211,5 @@ end
 
 Base.issorted(obj::Vcf) = vcf_issorted(obj)
 Base.merge(v1::Vcf, v2::Vcf) = vcf_merge(v1, v2)
+Base.length(v::Vcf) = length(v.data)
 
