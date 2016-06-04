@@ -226,6 +226,53 @@ function vcf_minus(v1::Vcf, v2::Vcf)
     return Vcf(header, result)
 end
 
+function vcf_filter(vcf::Vcf; total_depth=0, allele_depth=0, allele_freq=0.0, sample="")
+    if !vcf_has_format_column(vcf)
+        error("This VCF doesn't have a FORMAT column")
+    end
+    all_samples = vcf_samples(vcf)
+    if length(all_samples)==0
+        error("This VCF doesn't have any sample column")
+    end
+    if sample==""
+        sample=all_samples[1]
+    elseif !(sample in all_samples)
+        error("This VCF doesn't have sample $sample")
+    end
+    # sample index
+    s = 1
+    for i=1:length(all_samples)
+        if all_samples[i] == sample
+            s = i
+            break
+        end
+    end
+    good = Variant[]
+    bad = Variant[]
+    # GT:AD:DP:GQ:PL    0/1:37,14:51:99:111,0,614
+    ad_pos = 2
+    for v in vcf.data
+        values = split(v.samples[s], ":")
+        ad = split(values[2], ",")
+        if length(ad)<2
+            warn("illegal Allele Depth")
+            continue
+        end
+        ref_num = parse(Int64, strip(ad[1]))
+        alt_num = parse(Int64, strip(ad[2]))
+        total_num = ref_num + alt_num
+        alt_freq = float(alt_num)/float(total_num)
+        if total_num >= total_depth && alt_num >= allele_depth && alt_freq >= allele_freq
+            push!(good, deepcopy(v))
+        else
+            push!(bad, deepcopy(v))
+        end
+    end
+    good_vcf = Vcf(deepcopy(vcf.header), good)
+    bad_vcf = Vcf(deepcopy(vcf.header), bad)
+    return good_vcf, bad_vcf
+end
+
 +(v1::Vcf, v2::Vcf) = vcf_merge(v1, v2)
 -(v1::Vcf, v2::Vcf) = vcf_minus(v1, v2)
 *(v1::Vcf, v2::Vcf) = vcf_intersect(v1, v2)
