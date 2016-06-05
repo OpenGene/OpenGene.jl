@@ -333,7 +333,7 @@ function vcf_diff_genotype(v1::Vcf, v2::Vcf, v1_sample_id = 1, v2_sample_id = 1)
             push!(v2_diff, deepcopy(v2_common.data[i]))
         end
     end
-    return v1_diff, v2_diff
+    return Vcf(deepcopy(v1.header), v1_diff), Vcf(deepcopy(v2.header), v2_diff)
 end
 
 +(v1::Vcf, v2::Vcf) = vcf_merge(v1, v2)
@@ -343,4 +343,5 @@ end
 Base.issorted(obj::Vcf) = vcf_issorted(obj)
 Base.merge(v1::Vcf, v2::Vcf) = vcf_merge(v1, v2)
 Base.length(v::Vcf) = length(v.data)
+Base.getindex(obj::Vcf, i::Int64) = getindex(obj.data, i)
 
