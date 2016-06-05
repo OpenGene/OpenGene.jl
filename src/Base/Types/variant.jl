@@ -226,6 +226,18 @@ function vcf_minus(v1::Vcf, v2::Vcf)
     return Vcf(header, result)
 end
 
+function parse_genotype(gt_str::ASCIIString, format::ASCIIString = "GT:AD:DP:GQ:PL")
+    values = split(gt_str, ":")
+    gt = values[1]
+    ad = split(values[2], ",")
+    if length(ad)<2
+        warn("illegal Allele Depth")
+    end
+    ref_num = parse(Int64, strip(ad[1]))
+    alt_num = parse(Int64, strip(ad[2]))
+    return gt, ref_num, alt_num
+end
+
 function vcf_filter(vcf::Vcf; total_depth=0, allele_depth=0, allele_freq=0.0, sample="")
     if !vcf_has_format_column(vcf)
         error("This VCF doesn't have a FORMAT column")
@@ -252,14 +264,7 @@ function vcf_filter(vcf::Vcf; total_depth=0, allele_depth=0, allele_freq=0.0, sa
     # GT:AD:DP:GQ:PL    0/1:37,14:51:99:111,0,614
     ad_pos = 2
     for v in vcf.data
-        values = split(v.samples[s], ":")
-        ad = split(values[2], ",")
-        if length(ad)<2
-            warn("illegal Allele Depth")
-            continue
-        end
-        ref_num = parse(Int64, strip(ad[1]))
-        alt_num = parse(Int64, strip(ad[2]))
+        gt, ref_num, alt_num = parse_genotype(v.samples[s])
         total_num = ref_num + alt_num
         alt_freq = float(alt_num)/float(total_num)
         if total_num >= total_depth && alt_num >= allele_depth && alt_freq >= allele_freq
