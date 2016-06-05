@@ -71,14 +71,14 @@ function version(vcf::Vcf)
 end
 
 function var_lt(v1::Variant, v2::Variant)
-    if v1.chrom < v2.chrom || (v1.chrom == v2.chrom && v1.pos < v2.pos) || (v1.chrom == v2.chrom && v1.pos == v2.pos && v1.id < v2.id)
+    if v1.chrom < v2.chrom || (v1.chrom == v2.chrom && v1.pos < v2.pos)# || (v1.chrom == v2.chrom && v1.pos == v2.pos && v1.id < v2.id)
         return true
     end
     return false
 end
 
 function var_gt(v1::Variant, v2::Variant)
-    if v1.chrom > v2.chrom || (v1.chrom == v2.chrom && v1.pos > v2.pos) || (v1.chrom == v2.chrom && v1.pos == v2.pos && v1.id > v2.id)
+    if v1.chrom > v2.chrom || (v1.chrom == v2.chrom && v1.pos > v2.pos)# || (v1.chrom == v2.chrom && v1.pos == v2.pos && v1.id > v2.id)
         return true
     end
     return false
@@ -226,15 +226,40 @@ function vcf_minus(v1::Vcf, v2::Vcf)
     return Vcf(header, result)
 end
 
-function parse_genotype(gt_str::ASCIIString, format::ASCIIString = "GT:AD:DP:GQ:PL")
-    values = split(gt_str, ":")
-    gt = values[1]
-    ad = split(values[2], ",")
-    if length(ad)<2
-        warn("illegal Allele Depth")
+function parse_genotype(sample_str::ASCIIString, format::ASCIIString)
+    metas = split(format, ":")
+    gt_pos = -1
+    ad_pos = -1
+    rd_pos = -1
+    for i in 1:length(metas)
+        if metas[i] == "GT"
+            gt_pos = i
+        elseif metas[i] == "AD"
+            ad_pos = i
+        elseif metas[i] == "RD"
+            rd_pos = i
+        end
     end
-    ref_num = parse(Int64, strip(ad[1]))
-    alt_num = parse(Int64, strip(ad[2]))
+    if gt_pos == -1 || ad_pos == -1
+        error("GT or AD is not present in FORMAT")
+    end
+    values = split(sample_str, ":")
+    gt = values[gt_pos]
+    ad = split(values[ad_pos], ",")
+    ref_num = 0
+    alt_num = 0
+    if length(ad)<2
+        # GT:GQ:DP:RD:AD:FREQ:DP4
+        if rd_pos == -1
+            error("ref depth is not given neithger by AD nor RD")
+        end
+        ref_num = parse(Int64, strip(values[rd_pos]))
+        alt_num = parse(Int64, strip(ad[1]))
+    else
+        # "GT:AD:DP:GQ:PL"
+        ref_num = parse(Int64, strip(ad[1]))
+        alt_num = parse(Int64, strip(ad[2]))
+    end
     return gt, ref_num, alt_num
 end
 
@@ -264,7 +289,7 @@ function vcf_filter(vcf::Vcf; total_depth=0, allele_depth=0, allele_freq=0.0, sa
     # GT:AD:DP:GQ:PL    0/1:37,14:51:99:111,0,614
     ad_pos = 2
     for v in vcf.data
-        gt, ref_num, alt_num = parse_genotype(v.samples[s])
+        gt, ref_num, alt_num = parse_genotype(v.samples[s], v.format)
         total_num = ref_num + alt_num
         alt_freq = float(alt_num)/float(total_num)
         if total_num >= total_depth && alt_num >= allele_depth && alt_freq >= allele_freq
@@ -278,7 +303,7 @@ function vcf_filter(vcf::Vcf; total_depth=0, allele_depth=0, allele_freq=0.0, sa
     return good_vcf, bad_vcf
 end
 
-function vcf_diff_genotype(v1::Vcf, v2::Vcf)
+function vcf_diff_genotype(v1::Vcf, v2::Vcf, v1_sample_id = 1, v2_sample_id = 1)
     if !issorted(v1)
         info("The first vcf is not sorted, sort it now")
         sort!(v1)
@@ -287,10 +312,10 @@ function vcf_diff_genotype(v1::Vcf, v2::Vcf)
         info("The second vcf is not sorted, sort it now")
         sort!(v2)
     end
-    if length(vcf_samples(v1))==0
-        error("The first vcf has no sample column")
-    elseif length(vcf_samples(v2))==0
-        error("The second vcf has no sample column")
+    if v1_sample_id > length(vcf_samples(v1))
+        error("Wrong v1_sample_id")
+    elseif v2_sample_id > length(vcf_samples(v2))
+        error("Wrong v2_sample_id")
     end
     v1_diff = Variant[]
     v2_diff = Variant[]
@@ -301,11 +326,11 @@ function vcf_diff_genotype(v1::Vcf, v2::Vcf)
         error("length(v1_common) != length(v2_common)")
     end
     for i in 1:length(v1_common)
-        gt1, ref_num1, alt_num1 = parse_genotype(v1.data[i].samples[1])
-        gt2, ref_num2, alt_num2 = parse_genotype(v2.data[i].samples[1])
+        gt1, ref_num1, alt_num1 = parse_genotype(v1_common.data[i].samples[v1_sample_id], v1_common.data[i].format)
+        gt2, ref_num2, alt_num2 = parse_genotype(v2_common.data[i].samples[v2_sample_id], v2_common.data[i].format)
         if gt1 != gt2
-            push!(v1_diff, deepcopy(v1.data[i]))
-            push!(v2_diff, deepcopy(v2.data[i]))
+            push!(v1_diff, deepcopy(v1_common.data[i]))
+            push!(v2_diff, deepcopy(v2_common.data[i]))
         end
     end
     return v1_diff, v2_diff
