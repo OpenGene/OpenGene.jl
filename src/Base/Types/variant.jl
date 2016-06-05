@@ -278,6 +278,39 @@ function vcf_filter(vcf::Vcf; total_depth=0, allele_depth=0, allele_freq=0.0, sa
     return good_vcf, bad_vcf
 end
 
+function vcf_diff_genotype(v1::Vcf, v2::Vcf)
+    if !issorted(v1)
+        info("The first vcf is not sorted, sort it now")
+        sort!(v1)
+    end
+    if !issorted(v2)
+        info("The second vcf is not sorted, sort it now")
+        sort!(v2)
+    end
+    if length(vcf_samples(v1))==0
+        error("The first vcf has no sample column")
+    elseif length(vcf_samples(v2))==0
+        error("The second vcf has no sample column")
+    end
+    v1_diff = Variant[]
+    v2_diff = Variant[]
+    common = v1 * v2
+    v1_common = v1 * common
+    v2_common = v2 * common
+    if length(v1_common) != length(v2_common)
+        error("length(v1_common) != length(v2_common)")
+    end
+    for i in 1:length(v1_common)
+        gt1, ref_num1, alt_num1 = parse_genotype(v1.data[i].samples[1])
+        gt2, ref_num2, alt_num2 = parse_genotype(v2.data[i].samples[1])
+        if gt1 != gt2
+            push!(v1_diff, deepcopy(v1.data[i]))
+            push!(v2_diff, deepcopy(v2.data[i]))
+        end
+    end
+    return v1_diff, v2_diff
+end
+
 +(v1::Vcf, v2::Vcf) = vcf_merge(v1, v2)
 -(v1::Vcf, v2::Vcf) = vcf_minus(v1, v2)
 *(v1::Vcf, v2::Vcf) = vcf_intersect(v1, v2)
