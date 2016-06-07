@@ -100,6 +100,23 @@ vcfobj = vcf_read("in.vcf")
 vcf_write("out.vcf", vcfobj)
 ```
 
+***VCF Operations***
+```julia
+using OpenGene
+
+v1 = vcf_read("v1.vcf")
+v2 = vcf_read("v2.vcf")
+
+# merge
+v_merge = v1 + v2
+
+# intersect
+v_intersect = v1 * v2
+
+# remove v2 records from v1
+v_minus = v1 - v2
+```
+
 ***read/write a GTF***
 ```julia
 using OpenGene
