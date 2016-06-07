@@ -22,7 +22,7 @@ On Ubuntu, you can install Julia by `sudo apt-get install julia`, and type `juli
 # run on Julia REPL
 Pkg.add("OpenGene")
 ```
-If you want to get the latest dev version of OpenGene
+If you want to get the latest dev version of OpenGene (not for beginners)
 ```julia
 Pkg.checkout("OpenGene")
 ```
