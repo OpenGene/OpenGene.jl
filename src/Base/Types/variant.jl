@@ -245,6 +245,9 @@ function parse_genotype(sample_str::ASCIIString, format::ASCIIString)
     end
     values = split(sample_str, ":")
     gt = values[gt_pos]
+    if gt == "./."
+        return gt, -1, -1
+    end
     ad = split(values[ad_pos], ",")
     ref_num = 0
     alt_num = 0
