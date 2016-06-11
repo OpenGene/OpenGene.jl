@@ -339,6 +339,38 @@ function vcf_diff_genotype(v1::Vcf, v2::Vcf, v1_sample_id = 1, v2_sample_id = 1)
     return Vcf(deepcopy(v1.header), v1_diff), Vcf(deepcopy(v2.header), v2_diff)
 end
 
+function vcf_split_sample(vcf::Vcf)
+    samples = vcf_samples(vcf)
+    const tags = [ "CHROM", "CHROM", "POS", "ID","REF", "ALT", "QUAL", "FILTER", "INFO", "FORMAT"]
+    columns_without_sample = ASCIIString[]
+    for c in vcf.header.columns
+        if (c in tags)
+            push!(columns_without_sample, c)
+        end
+    end
+    splitted = Vcf[]
+    for s in samples
+        header = deepcopy(vcf.header)
+        columns = deepcopy(columns_without_sample)
+        push!(columns, s)
+        header.columns = columns
+        data = Variant[]
+        push!(splitted, Vcf(header, data))
+    end
+    for v in vcf.data
+        for s in 1:length(samples)
+            gt, ref_num, alt_num = parse_genotype(v.samples[s], v.format)
+            if gt != "./." && gt != "0/0"
+                var = deepcopy(v)
+                var.samples = ASCIIString[]
+                push!(var.samples, v.samples[s])
+                push!(splitted[s].data, var)
+            end
+        end
+    end
+    return splitted
+end
+
 +(v1::Vcf, v2::Vcf) = vcf_merge(v1, v2)
 -(v1::Vcf, v2::Vcf) = vcf_minus(v1, v2)
 *(v1::Vcf, v2::Vcf) = vcf_intersect(v1, v2)
