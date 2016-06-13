@@ -306,6 +306,55 @@ function vcf_filter(vcf::Vcf; total_depth=0, allele_depth=0, allele_freq=0.0, sa
     return good_vcf, bad_vcf
 end
 
+# a region is a string like chr1:13579-2312332
+function vcf_filter_region(vcf::Vcf, regions::Array{ASCIIString, 1})
+    parsed_regions = []
+    for r in regions
+        items = split(r, ":")
+        if length(items) != 2
+            warn("error format of region, should be like chr1:13579-2312332")
+            continue
+        end
+        chr = items[1]
+        pos = split(items[2], "-")
+        start_pos = parse(Int, pos[1])
+        end_pos = start_pos
+        if length(pos) > 1
+            end_pos = parse(Int, pos[2])
+        end
+        push!(parsed_regions, (chr, start_pos, end_pos))
+    end
+    good = Variant[]
+    bad = Variant[]
+    for v in vcf.data
+        found = false
+        for (chr, start_pos, end_pos) in parsed_regions
+            if v.chrom == chr && v.pos >= start_pos && v.pos <= end_pos
+                found = true
+                break
+            end
+        end
+        new_var = deepcopy(v)
+        if found
+            push!(good, new_var)
+        else
+            push!(bad, new_var)
+        end
+    end
+    good_vcf = Vcf(deepcopy(vcf.header), good)
+    bad_vcf = Vcf(deepcopy(vcf.header), bad)
+    return good_vcf, bad_vcf
+end
+
+# a region is like chr1:13579-2312332;chr3:132229-4533233
+function vcf_filter_region(vcf::Vcf, regions::ASCIIString)
+    splitted_regions = ASCIIString[]
+    for r in split(regions, ";")
+        push!(splitted_regions, ASCIIString(r))
+    end
+    return vcf_filter_region(vcf, splitted_regions)
+end
+
 function vcf_diff_genotype(v1::Vcf, v2::Vcf, v1_sample_id = 1, v2_sample_id = 1)
     if !issorted(v1)
         info("The first vcf is not sorted, sort it now")
