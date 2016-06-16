@@ -113,11 +113,11 @@ end
 
 function vcf_merge(v1::Vcf, v2::Vcf)
     if !issorted(v1)
-        info("The first vcf is not sorted, sort it now")
+        #info("The first vcf is not sorted, sort it now")
         sort!(v1)
     end
     if !issorted(v2)
-        info("The second vcf is not sorted, sort it now")
+        #info("The second vcf is not sorted, sort it now")
         sort!(v2)
     end
     result = Array{Variant, 1}()
@@ -170,11 +170,11 @@ end
 
 function vcf_intersect(v1::Vcf, v2::Vcf)
     if !issorted(v1)
-        info("The first vcf is not sorted, sort it now")
+        #info("The first vcf is not sorted, sort it now")
         sort!(v1)
     end
     if !issorted(v2)
-        info("The second vcf is not sorted, sort it now")
+        #info("The second vcf is not sorted, sort it now")
         sort!(v2)
     end
     result = Array{Variant, 1}()
@@ -357,11 +357,11 @@ end
 
 function vcf_diff_genotype(v1::Vcf, v2::Vcf, v1_sample_id = 1, v2_sample_id = 1)
     if !issorted(v1)
-        info("The first vcf is not sorted, sort it now")
+        #info("The first vcf is not sorted, sort it now")
         sort!(v1)
     end
     if !issorted(v2)
-        info("The second vcf is not sorted, sort it now")
+        #info("The second vcf is not sorted, sort it now")
         sort!(v2)
     end
     if v1_sample_id > length(vcf_samples(v1))
