@@ -107,13 +107,13 @@ using OpenGene
 v1 = vcf_read("v1.vcf")
 v2 = vcf_read("v2.vcf")
 
-# merge
+# merge by positions
 v_merge = v1 + v2
 
-# intersect
+# intersect by positions
 v_intersect = v1 * v2
 
-# remove v2 records from v1
+# remove v2 records from v1, by positions
 v_minus = v1 - v2
 ```
 
