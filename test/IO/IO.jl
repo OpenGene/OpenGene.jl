@@ -38,7 +38,7 @@ function test_fastq_writing()
         end
     end
 
-    rm(data_dir * "R1.out.fq")
+    rm(joinpath(data_dir, "R1.out.fq"))
 
     return true
 end
