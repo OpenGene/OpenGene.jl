@@ -1,7 +1,7 @@
 
 # compare FastqRead from gz files and not gz files
 function test_fastq_gz_reading()
-    data_dir = Pkg.dir("OpenGene") * "/test/testdata/fq/"
+    data_dir = joinpath(dirname(@__FILE__),"..","testdata","fq")
     # open the gz file
     gzstream = fastq_open(data_dir * "R1.fq.gz")
     # open the fq file, whose content is same as the gz file
@@ -17,7 +17,7 @@ function test_fastq_gz_reading()
 end
 
 function test_fastq_writing()
-    data_dir = Pkg.dir("OpenGene") * "/test/testdata/fq/"
+    data_dir = joinpath(dirname(@__FILE__),"..","testdata","fq")
 
     # open the fq file, whose content is same as the gz file
     instream = fastq_open(data_dir * "R1.fq")
