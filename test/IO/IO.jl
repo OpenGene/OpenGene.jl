@@ -3,9 +3,9 @@
 function test_fastq_gz_reading()
     data_dir = joinpath(dirname(@__FILE__),"..","testdata","fq")
     # open the gz file
-    gzstream = fastq_open(data_dir * "R1.fq.gz")
+    gzstream = fastq_open(joinpath(data_dir, "R1.fq.gz"))
     # open the fq file, whose content is same as the gz file
-    fqstream = fastq_open(data_dir * "R1.fq")
+    fqstream = fastq_open(joinpath(data_dir, "R1.fq"))
 
     while (fq = fastq_read(fqstream)) != false
         gzfq = fastq_read(gzstream)
@@ -20,16 +20,16 @@ function test_fastq_writing()
     data_dir = joinpath(dirname(@__FILE__),"..","testdata","fq")
 
     # open the fq file, whose content is same as the gz file
-    instream = fastq_open(data_dir * "R1.fq")
-    outstream = fastq_open(data_dir * "R1.out.fq", "w")
+    instream = fastq_open(joinpath(data_dir, "R1.fq"))
+    outstream = fastq_open(joinpath(data_dir, "R1.out.fq"), "w")
 
     while (fq = fastq_read(instream)) != false
         fastq_write(outstream, fq)
     end
     close(outstream)
 
-    instream1 = fastq_open(data_dir * "R1.fq")
-    instream2 = fastq_open(data_dir * "R1.out.fq")
+    instream1 = fastq_open(joinpath(data_dir, "R1.fq"))
+    instream2 = fastq_open(joinpath(data_dir, "R1.out.fq"))
 
     while (fq1 = fastq_read(instream1)) != false
         fq2 = fastq_read(instream2)
