@@ -1,9 +1,14 @@
 import SHA.sha1
 
+
 function check_sha1(file, hash)
     info("checking SHA1...")
     f = open(file)
     filehash = sha1(f)
+    # work around for SHA.sha1() incompatibility
+    if isa(filehash, Array{UInt8,1})
+        filehash = bytes2hex(filehash)
+    end
     if lowercase(filehash) == lowercase(hash)
         info("SHA1 OK")
         return true
