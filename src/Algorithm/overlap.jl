@@ -3,6 +3,10 @@ function distance_threshold(overlap_len)
     return min(6, overlap_len/10.0)
 end
 
+function overlap(r1::@compat String, r2::@compat String)
+    overlap(dna(r1), dna(r2))
+end
+
 """
 calculate the overlap length of a pair of reads
 """

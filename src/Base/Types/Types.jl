@@ -67,6 +67,10 @@ if VERSION < v"0.5.0-"
     import Base:complement
 end
 
+@static if VERSION < v"0.5.0-"
+    import complement
+end
+
 export DNA_SEQ,
 	RNA_SEQ,
 	AA_SEQ
