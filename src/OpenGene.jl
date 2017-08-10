@@ -8,6 +8,7 @@ module OpenGene
 
 using DataFrames
 
+# make it compatible for different version of Julia
 include("compat.jl")
 
 # all code in Base should have no code dependency on others
