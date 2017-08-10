@@ -13,7 +13,12 @@ chr1    11853920    11854179
 function bed_read_intervals(filename)
     records = Array{Interval}{1}()
     stream = opengene_open(filename, "r")
-    text = readall(stream)
+    # TODO: work around for readall missing in master
+    if isdefined(Base, :readstring)
+        text = readstring(stream)
+    else
+        text = readall(stream)
+    end
     lines = split(text, "\n")
     for line in lines
         # remove Windows/Mac line breaks

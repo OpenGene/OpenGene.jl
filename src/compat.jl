@@ -1,2 +1,1 @@
 import Compat:ASCIIString
-    readall
