@@ -1,12 +1,5 @@
 # OpenGene
 
-[![Build Status](https://travis-ci.org/OpenGene/OpenGene.jl.svg?branch=master)](https://travis-ci.org/OpenGene/OpenGene.jl)
-[![Packagist](https://img.shields.io/packagist/l/doctrine/orm.svg)]()
-[![Coverage Status](https://coveralls.io/repos/OpenGene/OpenGene.jl/badge.svg?branch=master&service=github)](https://coveralls.io/github/OpenGene/OpenGene.jl?branch=master)
-[![OpenGene](http://pkg.julialang.org/badges/OpenGene_0.4.svg)](http://pkg.julialang.org/?pkg=OpenGene)
-[![OpenGene](http://pkg.julialang.org/badges/OpenGene_0.5.svg)](http://pkg.julialang.org/?pkg=OpenGene)
-[![OpenGene](http://pkg.julialang.org/badges/OpenGene_0.6.svg)](http://pkg.julialang.org/?pkg=OpenGene)
-
 `OpenGene.jl` project aims to provide basic functions and rich utilities to analyze sequencing data, with the beautiful language [Julia](http://julialang.org/)   
 
 If you want to be an author of OpenGene, please open an issue, or make a pull request.  
