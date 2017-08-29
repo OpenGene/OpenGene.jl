@@ -15,7 +15,7 @@ const gencode_releases = Dict(
         "source" => "ftp://ftp.sanger.ac.uk/pub/gencode/Gencode_human/release_19/gencode.v19.annotation.gtf.gz"
     ),
     "grch38" => Dict(
-        "localefile" => joinpath(gencode_dir(), "gencode.v24.annotation.gtf.gz"),
+        "localfile" => joinpath(gencode_dir(), "gencode.v24.annotation.gtf.gz"),
         "source" => "ftp://ftp.sanger.ac.uk/pub/gencode/Gencode_human/release_24/gencode.v24.annotation.gtf.gz"
     )
 )
