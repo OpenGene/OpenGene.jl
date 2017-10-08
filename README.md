@@ -132,7 +132,7 @@ end
 ```julia
 using OpenGene, OpenGene.Reference
 
-# load the gencode dataset, it will download a file from gencode website if it not downloaded before
+# load the gencode dataset, it will download a file from gencode website if it's not downloaded before
 # once it's loaded, it will be cached so future loads will be fast
 index = gencode_load("GRCh37")
 
