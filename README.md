@@ -1,3 +1,4 @@
+# This project is no longer maintained
 # OpenGene
 
 `OpenGene.jl` project aims to provide basic functions and rich utilities to analyze sequencing data, with the beautiful language [Julia](http://julialang.org/)   
